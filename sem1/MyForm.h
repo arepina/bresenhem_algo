@@ -31,7 +31,13 @@ namespace sem1 {
 			blueBrush = gcnew SolidBrush(Color::Blue);
 			col = gcnew Color();
 			pen = gcnew Pen(col->Red);
-			draw_axes();//поч не рисует!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			x1 = -1;
+			y1 = -1;
+			x2 = -1;
+			y2 = -1;
+			rad1 = -1;
+			rad2 = -1;
+			existedMethod = false;
 		}
 
 	protected:
@@ -50,6 +56,9 @@ namespace sem1 {
 	private: Color ^col;
 	private: SolidBrush^ blueBrush;
 	private: Pen ^pen;
+	private: int switcher;
+	private: int x1, y1, x2, y2, rad1, rad2;
+	private: bool existedMethod;
 	private: System::Windows::Forms::PictureBox^  canvas;
 	private: System::Windows::Forms::Button^  line;
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
@@ -60,20 +69,12 @@ namespace sem1 {
 	private: System::Windows::Forms::Button^  circle;
 	private: System::Windows::Forms::Button^  elipse;
 	private: System::Windows::Forms::Button^  clear;
-	private: System::Windows::Forms::TextBox^  x1_field;
-	private: System::Windows::Forms::TextBox^  y1_field;
-	private: System::Windows::Forms::TextBox^  x2_field;
-	private: System::Windows::Forms::TextBox^  y2_field;
-	private: System::Windows::Forms::Label^  label1;
-	private: System::Windows::Forms::Label^  label2;
-	private: System::Windows::Forms::Label^  label3;
-	private: System::Windows::Forms::Label^  label4;
-	private: System::Windows::Forms::Label^  label5;
-	private: System::Windows::Forms::Label^  label6;
-	private: System::Windows::Forms::TextBox^  y1_circle;
-	private: System::Windows::Forms::TextBox^  x1_circle;
-	private: System::Windows::Forms::Label^  label7;
-	private: System::Windows::Forms::TextBox^  rad_circle;
+
+
+
+
+
+
 	private: System::Windows::Forms::Label^  label8;
 	private: System::Windows::Forms::Label^  label9;
 	private: System::Windows::Forms::Label^  label10;
@@ -82,6 +83,8 @@ namespace sem1 {
 	private: System::Windows::Forms::TextBox^  rad1_elipse;
 	private: System::Windows::Forms::TextBox^  y1_elipse;
 	private: System::Windows::Forms::TextBox^  x1_elipse;
+	private: System::Windows::Forms::CheckBox^  existedMethodChecker;
+
 
 
 	protected:
@@ -107,20 +110,6 @@ namespace sem1 {
 			this->circle = (gcnew System::Windows::Forms::Button());
 			this->elipse = (gcnew System::Windows::Forms::Button());
 			this->clear = (gcnew System::Windows::Forms::Button());
-			this->x1_field = (gcnew System::Windows::Forms::TextBox());
-			this->y1_field = (gcnew System::Windows::Forms::TextBox());
-			this->x2_field = (gcnew System::Windows::Forms::TextBox());
-			this->y2_field = (gcnew System::Windows::Forms::TextBox());
-			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->label4 = (gcnew System::Windows::Forms::Label());
-			this->label5 = (gcnew System::Windows::Forms::Label());
-			this->label6 = (gcnew System::Windows::Forms::Label());
-			this->y1_circle = (gcnew System::Windows::Forms::TextBox());
-			this->x1_circle = (gcnew System::Windows::Forms::TextBox());
-			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->rad_circle = (gcnew System::Windows::Forms::TextBox());
 			this->label8 = (gcnew System::Windows::Forms::Label());
 			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->label10 = (gcnew System::Windows::Forms::Label());
@@ -129,6 +118,7 @@ namespace sem1 {
 			this->rad1_elipse = (gcnew System::Windows::Forms::TextBox());
 			this->y1_elipse = (gcnew System::Windows::Forms::TextBox());
 			this->x1_elipse = (gcnew System::Windows::Forms::TextBox());
+			this->existedMethodChecker = (gcnew System::Windows::Forms::CheckBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->canvas))->BeginInit();
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -141,10 +131,11 @@ namespace sem1 {
 			this->canvas->Size = System::Drawing::Size(620, 297);
 			this->canvas->TabIndex = 0;
 			this->canvas->TabStop = false;
+			this->canvas->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::canvas_MouseClick);
 			// 
 			// line
 			// 
-			this->line->Location = System::Drawing::Point(12, 95);
+			this->line->Location = System::Drawing::Point(12, 54);
 			this->line->Name = L"line";
 			this->line->Size = System::Drawing::Size(155, 23);
 			this->line->TabIndex = 1;
@@ -179,7 +170,7 @@ namespace sem1 {
 			// 
 			// circle
 			// 
-			this->circle->Location = System::Drawing::Point(12, 174);
+			this->circle->Location = System::Drawing::Point(12, 83);
 			this->circle->Name = L"circle";
 			this->circle->Size = System::Drawing::Size(155, 25);
 			this->circle->TabIndex = 3;
@@ -206,125 +197,6 @@ namespace sem1 {
 			this->clear->Text = L"Очистить";
 			this->clear->UseVisualStyleBackColor = true;
 			this->clear->Click += gcnew System::EventHandler(this, &MyForm::clear_Click);
-			// 
-			// x1_field
-			// 
-			this->x1_field->Location = System::Drawing::Point(36, 43);
-			this->x1_field->Name = L"x1_field";
-			this->x1_field->Size = System::Drawing::Size(31, 20);
-			this->x1_field->TabIndex = 6;
-			this->x1_field->Text = L"0";
-			// 
-			// y1_field
-			// 
-			this->y1_field->Location = System::Drawing::Point(36, 69);
-			this->y1_field->Name = L"y1_field";
-			this->y1_field->Size = System::Drawing::Size(31, 20);
-			this->y1_field->TabIndex = 7;
-			this->y1_field->Text = L"0";
-			// 
-			// x2_field
-			// 
-			this->x2_field->Location = System::Drawing::Point(99, 43);
-			this->x2_field->Name = L"x2_field";
-			this->x2_field->Size = System::Drawing::Size(31, 20);
-			this->x2_field->TabIndex = 8;
-			this->x2_field->Text = L"50";
-			// 
-			// y2_field
-			// 
-			this->y2_field->Location = System::Drawing::Point(99, 69);
-			this->y2_field->Name = L"y2_field";
-			this->y2_field->Size = System::Drawing::Size(31, 20);
-			this->y2_field->TabIndex = 9;
-			this->y2_field->Text = L"10";
-			// 
-			// label1
-			// 
-			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(12, 46);
-			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(18, 13);
-			this->label1->TabIndex = 10;
-			this->label1->Text = L"x1";
-			// 
-			// label2
-			// 
-			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(12, 72);
-			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(18, 13);
-			this->label2->TabIndex = 11;
-			this->label2->Text = L"y1";
-			// 
-			// label3
-			// 
-			this->label3->AutoSize = true;
-			this->label3->Location = System::Drawing::Point(75, 46);
-			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(18, 13);
-			this->label3->TabIndex = 12;
-			this->label3->Text = L"x2";
-			// 
-			// label4
-			// 
-			this->label4->AutoSize = true;
-			this->label4->Location = System::Drawing::Point(75, 72);
-			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(18, 13);
-			this->label4->TabIndex = 13;
-			this->label4->Text = L"y2";
-			// 
-			// label5
-			// 
-			this->label5->AutoSize = true;
-			this->label5->Location = System::Drawing::Point(12, 155);
-			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(18, 13);
-			this->label5->TabIndex = 17;
-			this->label5->Text = L"y1";
-			// 
-			// label6
-			// 
-			this->label6->AutoSize = true;
-			this->label6->Location = System::Drawing::Point(12, 129);
-			this->label6->Name = L"label6";
-			this->label6->Size = System::Drawing::Size(18, 13);
-			this->label6->TabIndex = 16;
-			this->label6->Text = L"x1";
-			// 
-			// y1_circle
-			// 
-			this->y1_circle->Location = System::Drawing::Point(36, 152);
-			this->y1_circle->Name = L"y1_circle";
-			this->y1_circle->Size = System::Drawing::Size(31, 20);
-			this->y1_circle->TabIndex = 15;
-			this->y1_circle->Text = L"0";
-			// 
-			// x1_circle
-			// 
-			this->x1_circle->Location = System::Drawing::Point(36, 126);
-			this->x1_circle->Name = L"x1_circle";
-			this->x1_circle->Size = System::Drawing::Size(31, 20);
-			this->x1_circle->TabIndex = 14;
-			this->x1_circle->Text = L"0";
-			// 
-			// label7
-			// 
-			this->label7->AutoSize = true;
-			this->label7->Location = System::Drawing::Point(75, 129);
-			this->label7->Name = L"label7";
-			this->label7->Size = System::Drawing::Size(22, 13);
-			this->label7->TabIndex = 19;
-			this->label7->Text = L"rad";
-			// 
-			// rad_circle
-			// 
-			this->rad_circle->Location = System::Drawing::Point(99, 126);
-			this->rad_circle->Name = L"rad_circle";
-			this->rad_circle->Size = System::Drawing::Size(31, 20);
-			this->rad_circle->TabIndex = 18;
-			this->rad_circle->Text = L"100";
 			// 
 			// label8
 			// 
@@ -394,11 +266,23 @@ namespace sem1 {
 			this->x1_elipse->TabIndex = 20;
 			this->x1_elipse->Text = L"0";
 			// 
+			// existedMethodChecker
+			// 
+			this->existedMethodChecker->AutoSize = true;
+			this->existedMethodChecker->Location = System::Drawing::Point(12, 135);
+			this->existedMethodChecker->Name = L"existedMethodChecker";
+			this->existedMethodChecker->Size = System::Drawing::Size(138, 17);
+			this->existedMethodChecker->TabIndex = 28;
+			this->existedMethodChecker->Text = L"Встроенные средства";
+			this->existedMethodChecker->UseVisualStyleBackColor = true;
+			this->existedMethodChecker->CheckedChanged += gcnew System::EventHandler(this, &MyForm::existedMethodChecker_CheckedChanged);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(826, 409);
+			this->Controls->Add(this->existedMethodChecker);
 			this->Controls->Add(this->label8);
 			this->Controls->Add(this->label9);
 			this->Controls->Add(this->label10);
@@ -407,20 +291,6 @@ namespace sem1 {
 			this->Controls->Add(this->rad1_elipse);
 			this->Controls->Add(this->y1_elipse);
 			this->Controls->Add(this->x1_elipse);
-			this->Controls->Add(this->label7);
-			this->Controls->Add(this->rad_circle);
-			this->Controls->Add(this->label5);
-			this->Controls->Add(this->label6);
-			this->Controls->Add(this->y1_circle);
-			this->Controls->Add(this->x1_circle);
-			this->Controls->Add(this->label4);
-			this->Controls->Add(this->label3);
-			this->Controls->Add(this->label2);
-			this->Controls->Add(this->label1);
-			this->Controls->Add(this->y2_field);
-			this->Controls->Add(this->x2_field);
-			this->Controls->Add(this->y1_field);
-			this->Controls->Add(this->x1_field);
 			this->Controls->Add(this->clear);
 			this->Controls->Add(this->elipse);
 			this->Controls->Add(this->circle);
@@ -441,15 +311,15 @@ namespace sem1 {
 
 
 	private: System::Void line_Click(System::Object^  sender, System::EventArgs^  e) {
-		bres_line();
+		switcher = 0;
 	}
 
 	private: System::Void circle_Click(System::Object^  sender, System::EventArgs^  e) {
-		bres_circle();
+		switcher = 1;
 	}
 
 	private: System::Void elipse_Click(System::Object^  sender, System::EventArgs^  e) {
-		bres_elipse();
+		switcher = 2;
 	}
 
 	private: System::Void clear_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -465,19 +335,10 @@ namespace sem1 {
 		im->Clear(col->White);
 	}
 
+			 //алгоритм Брезенхема построения отрезка
 	public: System::Void bres_line()
 	{
-		if (x1_field->Text == "" || x2_field->Text == "" || y1_field->Text == "" || y2_field->Text == "")
-		{
-			MessageBox::Show("Требуется ввести все значения полей!", "Ошибка");
-			return;
-		}
-		//заданные пользователем координаты
-		int x1 = Convert::ToInt32(x1_field->Text);
-		int y1 = Convert::ToInt32(y1_field->Text);
-		int x2 = Convert::ToInt32(x2_field->Text);
-		int y2 = Convert::ToInt32(y2_field->Text);
-		//алгоритм Брезенхема построения отрезка
+
 		int x = x1;
 		int y = y1;
 		int delta_x = abs(x2 - x1);
@@ -497,7 +358,7 @@ namespace sem1 {
 		int error_val = 2 * delta_y - delta_x;
 		for (int i = 1; i <= delta_x; i++)
 		{
-			im->FillRectangle(blueBrush, x, y, x, y);
+			im->FillRectangle(blueBrush, x, y, 1, 1);
 			while (error_val >= 0)
 			{
 				obmen == 1 ? x = x + s1 : y = y + s2;
@@ -506,31 +367,19 @@ namespace sem1 {
 			obmen == 1 ? y = y + s2 : x = x + s1;
 			error_val = error_val + 2 * delta_y;
 		}
-		im->DrawLine(pen, x1, y1, x2, y2);//для сравнения другим цветом
 	}
 
+	//алгоритм Брезенхема построения окружности
 	public: System::Void bres_circle()
 	{
-		//поч не юзаем игрек, поч ток часть круга!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		if (x1_circle->Text == "" || y1_circle->Text == "" || rad_circle->Text == "")
-		{
-			MessageBox::Show("Требуется ввести все значения полей!", "Ошибка");
-			return;
-		}
-		//заданные пользователем координаты
-		int x1 = Convert::ToInt32(x1_circle->Text);
-		int y1 = Convert::ToInt32(y1_circle->Text);
-		int rad = Convert::ToInt32(rad_circle->Text);
-		im->DrawEllipse(pen, x1, y1, rad, rad);//для сравнения другим цветом
-		//алгоритм Брезенхема построения окружности
 		int x = 0;
-		int y = rad;
-		int delta = 2 * (1 - rad);
+		int y = rad1;
+		int delta = 2 * (1 - rad1);
 		int predel = 0;
 		int sigma = 0;
 		do
 		{
-			im->FillRectangle(blueBrush, x, y, x, y);
+			im->FillRectangle(blueBrush, x, y, 1, 1);
 			if (y <= predel)
 				return;
 			if (delta < 0)
@@ -571,7 +420,8 @@ namespace sem1 {
 	}
 
 	public: System::Void bres_elipse()
-	{		//поч не рисует!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	{
+		//поч не рисует!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		if (x1_elipse->Text == "" || rad1_elipse->Text == "" || y1_elipse->Text == "" || rad2_elipse->Text == "")
 		{
 			MessageBox::Show("Требуется ввести все значения полей!", "Ошибка");
@@ -586,13 +436,51 @@ namespace sem1 {
 		//целочисленный алгоритм построения	эллипса
 	}
 
-	public: System::Void draw_axes()
-	{
-		int width = canvas->Width;
-		int height = canvas->Height;
-		im->DrawLine(gcnew Pen(col->Black), width / 2, 0, width / 2, height);
-		im->DrawLine(gcnew Pen(col->Black), 0, height / 2, width, height / 2);
-	}
 
+	private: System::Void canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+		switch (switcher)
+		{
+		case 0://line
+		{
+			if (x1 != -1 && y1 != -1)
+			{
+				x2 = e->X;
+				y2 = e->Y;
+				existedMethod == false ? im->DrawLine(pen, x1, y1, x2, y2) : bres_line();
+				x1 = -1;
+				y1 = -1;
+			}
+			else {
+				x1 = e->X;
+				y1 = e->Y;
+			}
+			break;
+		}
+		case 1://circle
+		{
+			if (x1 != -1 && y1 != -1)
+			{
+				int cur_x = e->X;
+				int cur_y = e->Y;
+				rad1 = sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
+				existedMethod == false ? im->DrawEllipse(pen, x1 - rad1, y1 - rad1, rad1 * 2, rad1 * 2) : bres_circle();
+				x1 = -1;
+				y1 = -1;
+			}
+			else {
+				x1 = e->X;
+				y1 = e->Y;
+			}
+			break;
+		}
+		case 2://elipse
+		{
+			break;
+		}
+		}
+	}
+	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+		existedMethod = !existedMethod;
+	}
 	};
 }
