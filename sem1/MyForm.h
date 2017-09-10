@@ -154,7 +154,7 @@ namespace sem1 {
 			this->objects->DisplayMember = L"Отрезок";
 			this->objects->FormattingEnabled = true;
 			this->objects->IntegralHeight = false;
-			this->objects->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Отрезок", L"Окружность", L"Элипс" });
+			this->objects->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Отрезок", L"Окружность", L"Эллипс" });
 			this->objects->Location = System::Drawing::Point(12, 43);
 			this->objects->Name = L"objects";
 			this->objects->Size = System::Drawing::Size(121, 21);
@@ -190,12 +190,17 @@ namespace sem1 {
 		MessageBox::Show("Программа выполнена студенткой группы БПИ143(1) \nРепиной Анастасией Андреевной \nСреда разработки: Visual Studio 2015 Entherprise \nОС Windows 10 \nДата 07.09.2017 \nВыполнены пункты: 1), 2), 3)", "О программе");
 	}
 
+	/*
+	clean the canvas
+	*/
 	private: void cleanCanvas()
 	{
 		im->Clear(col->White);
 	}
 
-    //алгоритм Брезенхема построения отрезка
+	/*
+	bresenham line algo
+	*/
 	public: System::Void bres_line()
 	{
 
@@ -229,7 +234,9 @@ namespace sem1 {
 		}
 	}
 
-	//алгоритм Брезенхема построения окружности
+	/*
+	bresenham circle algo
+	*/
 	public: System::Void bres_circle()
 	{
 		int x = 0;
@@ -239,10 +246,7 @@ namespace sem1 {
 		int sigma = 0;
 		do
 		{
-			im->FillRectangle(blueBrush, x + x1, y + y1, 1, 1);
-			im->FillRectangle(blueBrush, x1 - x, y + y1, 1, 1);
-			im->FillRectangle(blueBrush, x + x1, y1 - y, 1, 1);
-			im->FillRectangle(blueBrush, x1 - x, y1 - y, 1, 1);
+			draw(x, y);
 			if (y <= predel)
 				return;
 			if (delta < 0)
@@ -282,55 +286,48 @@ namespace sem1 {
 		} while (true);
 	}
 
-	//целочисленный алгоритм построения	эллипса
-	public: System::Void bres_elipse()
+	/*
+	ellipse algo
+	*/
+	public: System::Void bres_ellipse()
 	{
+		int delta_rad1 = 1 - 2 * rad1;
+		int delta_rad2 = 1 - 2 * rad2;
+		// first two parts of ellipse
 		int x = 0;
-		int y = rad1;
-		int delta = 2 * (1 - rad1);
-		int predel = 0;
-		int sigma = 0;
-		do
-		{
-			im->FillRectangle(blueBrush, x, y, 1, 1);
-			if (y <= predel)
-				return;
-			if (delta < 0)
-			{
-				sigma = 2 * delta + 2 * y - 1;
-				if (sigma <= 0)
-				{
-					x = x + 1;
-					delta = delta + 2 * x + 1;
-				}
-				else {
-					x = x + 1;
-					y = y - 1;
-					delta = delta + 2 * x - 2 * y + 2;
-				}
-			}
-			else if (delta > 0)
-			{
-				sigma = 2 * delta - 2 * x - 1;
-				if (sigma <= 0)
-				{
-					x = x + 1;
-					y = y - 1;
-					delta = delta + 2 * x - 2 * y + 2;
-				}
-				else {
-					y = y - 1;
-					delta = delta - 2 * y + 1;
-				}
-			}
-			else {
-				x = x + 1;
-				y = y - 1;
-				delta = delta + 2 * x - 2 * y + 2;
-			}
-
-		} while (true);
+		int y = rad2;
+		int sigma = (int)(2 * pow(rad2, 2) + pow(rad1, 2) * delta_rad2);
+		draw_part(x, y, rad1, rad2, sigma, true);
+		// second two parts of ellipse
+		x = rad1;
+		y = 0;
+		sigma = (int)(2 * pow(rad1, 2) + pow(rad2, 2) * delta_rad1);
+		draw_part(y, x, rad2, rad1, sigma, false);
 	}
+
+	private: System::Void draw_part(int x, int y, int rad1, int rad2, int sigma, bool which_part)
+	{
+		while (pow(rad2, 2) * x <= pow(rad1, 2) * y)
+		{
+			which_part ? draw(x, y) : draw(y, x);
+			if (sigma >= 0)
+			{
+				sigma = (int)(sigma + 4 * pow(rad1, 2) * (1 - y));
+				y = y - 1;
+			}
+			sigma = (int)(sigma + pow(rad2, 2) * ((4 * x) + 6));
+			x = x + 1;
+		}
+	}
+
+	private: System::Void draw(int x, int y)
+	{
+		im->FillRectangle(blueBrush, x + x1, y + y1, 1, 1);
+		im->FillRectangle(blueBrush, x1 - x, y + y1, 1, 1);
+		im->FillRectangle(blueBrush, x + x1, y1 - y, 1, 1);
+		im->FillRectangle(blueBrush, x1 - x, y1 - y, 1, 1);
+	}
+
 
 	private: System::Void canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 		switch (objects->SelectedIndex)
@@ -361,6 +358,7 @@ namespace sem1 {
 				existedMethod == false ? bres_circle() : im->DrawEllipse(pen, x1 - rad1, y1 - rad1, rad1 * 2, rad1 * 2);
 				x1 = -1;
 				y1 = -1;
+				rad1 = -1;
 			}
 			else {
 				x1 = e->X;
@@ -368,18 +366,36 @@ namespace sem1 {
 			}
 			break;
 		}
-		case 2://elipse
+		case 2://ellipse
 		{
-			im->DrawEllipse(pen, x1, y1, rad1, rad2);//для сравнения другим цветом
+			if (x1 != -1 && y1 != -1)
+			{
+				int cur_x = e->X;
+				int cur_y = e->Y;
+				if (rad1 != -1)
+				{
+					rad2 = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
+					existedMethod == false ? bres_ellipse() : im->DrawEllipse(pen, x1 - rad1, y1 - rad1, rad1 * 2, rad2 * 2);
+					x1 = -1;
+					y1 = -1;
+					rad1 = -1;
+				}
+				else
+					rad1 = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
+			}
+			else {
+				x1 = e->X;
+				y1 = e->Y;
+			}
 			break;
 		}
 		}
 	}
 
 	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
-		existedMethod = !existedMethod;
+		existedMethod = !existedMethod;//do we use existed methods or the bresenham algo
 	}
 
 
-};
+	};
 }

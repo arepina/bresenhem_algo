@@ -20,4 +20,4 @@ Class sem1.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   Methods:
     bres_line(): PrivateScope, Public, HideBySig
     bres_circle(): PrivateScope, Public, HideBySig
-    bres_elipse(): PrivateScope, Public, HideBySig
+    bres_ellipse(): PrivateScope, Public, HideBySig
