@@ -239,7 +239,10 @@ namespace sem1 {
 		int sigma = 0;
 		do
 		{
-			im->FillRectangle(blueBrush, x1 + x, y1 + y, 1, 1);
+			im->FillRectangle(blueBrush, x + x1, y + y1, 1, 1);
+			im->FillRectangle(blueBrush, x1 - x, y + y1, 1, 1);
+			im->FillRectangle(blueBrush, x + x1, y1 - y, 1, 1);
+			im->FillRectangle(blueBrush, x1 - x, y1 - y, 1, 1);
 			if (y <= predel)
 				return;
 			if (delta < 0)
