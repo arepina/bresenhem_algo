@@ -67,12 +67,13 @@ ellipse algo
 System::Void sem1::MyForm::bres_ellipse()
 {
 	int x = 0;
-	int y = rad_first;
-	int delta = 2 * (1 - rad_first);
-	int predel = 0;
+	int y = rad_second; 
 	int sigma = 0;
 	int a = rad_first;
 	int b = rad_second;
+	//b^2(0+1)^2-a^2*(y-1)^2-a^2b^2 = b^2-a^2*(b-1)^2-a^2b^2 = b^2-a^2*(b-1)-a^2(2b - 1)
+	int delta = pow(b, 2) - pow(a, 2) * (2 * b - 1);
+	int predel = 0;
 	do
 	{
 		draw_pixels(x, y);//draw 4 pixels on the canvas having only one coordinate

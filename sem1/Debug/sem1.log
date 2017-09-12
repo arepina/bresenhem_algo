@@ -1,4 +1,5 @@
 ﻿  MyForm.cpp
+MyForm.cpp(75): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
   MyForm.obj : /DEBUG:FASTLINK не поддерживается, если присутствует управляемый код; выполняется перезапуск компоновки с /DEBUG:FULL
   sem1.vcxproj -> D:\bresenhem_algo\Debug\sem1.exe
   sem1.vcxproj -> D:\bresenhem_algo\Debug\sem1.pdb (Partial PDB)
