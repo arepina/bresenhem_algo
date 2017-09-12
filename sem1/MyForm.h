@@ -186,7 +186,6 @@ namespace sem1 {
 	public: System::Void bres_line();//bresenham line algo
 	public: System::Void bres_circle();//bresenham circle algo
 	public: System::Void bres_ellipse();//ellipse algo
-	private: System::Void draw_part(int x, int y, int rad_one, int rad_two, int sigma, bool which_part);
 	private: System::Void draw_pixels(int x, int y);
 	private: System::Void canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e);

@@ -57,51 +57,8 @@ bresenham circle algo
 */
 System::Void sem1::MyForm::bres_circle()
 {
-	int x = 0;
-	int y = rad_first;
-	int delta = 2 * (1 - rad_first);
-	int predel = 0;
-	int sigma = 0;
-	do
-	{
-		draw_pixels(x, y);
-		if (y <= predel)
-			return;
-		if (delta < 0)
-		{
-			sigma = 2 * delta + 2 * y - 1;
-			if (sigma <= 0)
-			{
-				x = x + 1;
-				delta = delta + 2 * x + 1;
-			}
-			else {
-				x = x + 1;
-				y = y - 1;
-				delta = delta + 2 * x - 2 * y + 2;
-			}
-		}
-		else if (delta > 0)
-		{
-			sigma = 2 * delta - 2 * x - 1;
-			if (sigma <= 0)
-			{
-				x = x + 1;
-				y = y - 1;
-				delta = delta + 2 * x - 2 * y + 2;
-			}
-			else {
-				y = y - 1;
-				delta = delta - 2 * y + 1;
-			}
-		}
-		else {
-			x = x + 1;
-			y = y - 1;
-			delta = delta + 2 * x - 2 * y + 2;
-		}
-
-	} while (true);
+	rad_second = rad_first;
+	bres_ellipse();
 }
 
 /*
@@ -109,34 +66,54 @@ ellipse algo
 */
 System::Void sem1::MyForm::bres_ellipse()
 {
-	int delta_rad1 = 1 - 2 * rad_first;
-	int delta_rad2 = 1 - 2 * rad_second;
-	// first two parts of ellipse
 	int x = 0;
-	int y = rad_second;
-	int sigma = (int)(2 * pow(rad_second, 2) + pow(rad_first, 2) * delta_rad2);
-	draw_part(x, y, rad_first, rad_second, sigma, true);
-	// second two parts of ellipse
-	x = rad_first;
-	y = 0;
-	sigma = (int)(2 * pow(rad_first, 2) + pow(rad_second, 2) * delta_rad1);
-	draw_part(y, x, rad_second, rad_first, sigma, false);
+	int y = rad_first;
+	int delta = 2 * (1 - rad_first);
+	int predel = 0;
+	int sigma = 0;
+	int a = rad_first;
+	int b = rad_second;
+	do
+	{
+		draw_pixels(x, y);//draw 4 pixels on the canvas having only one coordinate
+		if (y <= predel)
+			return;
+		if (delta < 0)
+		{
+			sigma = (int)(2 * delta + pow(a, 2) * (2 * y - 1));//choose between diagonal and horizontal
+			if (sigma <= 0)
+			{
+				x = x + 1;
+				delta = (int)(delta + pow(b, 2)*(2 * x + 1));//horizontal
+			}
+			else {
+				x = x + 1;
+				y = y - 1;
+				delta = (int)(delta + pow(b, 2)*(2 * x + 1) - pow(a, 2)*(2 * y - 1));//diagonal
+			}
+		}
+		else if (delta > 0)
+		{
+			sigma = (int)(2 * delta - pow(b, 2) * (2 * x - 1));;//choose between diagonal and vertical
+			if (sigma <= 0)
+			{
+				x = x + 1;
+				y = y - 1;
+				delta = (int)(delta + pow(b, 2)*(2 * x + 1) - pow(a, 2)*(2 * y - 1));//diagonal
+			}
+			else {
+				y = y - 1;
+				delta = (int)(delta - pow(a, 2)*(2 * y - 1));//vertical
+			}
+		}
+		else {
+			x = x + 1;
+			y = y - 1;
+			delta = (int)(delta + pow(b, 2)*(2 * x + 1) - pow(a, 2)*(2 * y - 1));//diagonal
+		}
+	} while (true);
 }
 
-System::Void sem1::MyForm::draw_part(int x, int y, int rad_one, int rad_two, int sigma, bool which_part)
-{
-	while (pow(rad_two, 2) * x <= pow(rad_one, 2) * y)
-	{
-		which_part ? draw_pixels(x, y) : draw_pixels(y, x);
-		if (sigma >= 0)
-		{
-			sigma = (int)(sigma + 4 * pow(rad_one, 2) * (1 - y));
-			y = y - 1;
-		}
-		sigma = (int)(sigma + pow(rad_two, 2) * ((4 * x) + 6));
-		x = x + 1;
-	}
-}
 
 System::Void sem1::MyForm::draw_pixels(int x, int y)
 {
