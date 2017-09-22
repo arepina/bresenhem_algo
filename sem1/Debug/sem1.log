@@ -1,5 +1,5 @@
 ﻿  MyForm.cpp
-MyForm.cpp(75): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
-  MyForm.obj : /DEBUG:FASTLINK не поддерживается, если присутствует управляемый код; выполняется перезапуск компоновки с /DEBUG:FULL
-  sem1.vcxproj -> D:\bresenhem_algo\Debug\sem1.exe
-  sem1.vcxproj -> D:\bresenhem_algo\Debug\sem1.pdb (Partial PDB)
+MyForm.cpp(7): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+MyForm.cpp(77): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  .NETFramework,Version=v4.5.2.AssemblyAttributes.cpp
+  sem1.vcxproj -> C:\Users\aarep\Downloads\bresenhem_algo\Debug\sem1.exe

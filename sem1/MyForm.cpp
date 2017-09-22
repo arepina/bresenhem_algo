@@ -1,8 +1,10 @@
 #include "MyForm.h"
+#include <ctime>
 #include <Windows.h>
 using namespace sem1; //пространство имен из заголовочного файла формы !!!
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
+	srand(time(0));
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
 	Application::Run(gcnew MyForm);
@@ -115,7 +117,6 @@ System::Void sem1::MyForm::bres_ellipse()
 	} while (true);
 }
 
-
 System::Void sem1::MyForm::draw_pixels(int x, int y)
 {
 	im->FillRectangle(blueBrush, x + x1, y + y1, 1, 1);
@@ -132,22 +133,67 @@ System::Void sem1::MyForm::aboutProgramToolStripMenuItem_Click(System::Object^  
 	MessageBox::Show("Программа выполнена студенткой группы БПИ143(1) \nРепиной Анастасией Андреевной \nСреда разработки: Visual Studio 2015 Entherprise \nОС Windows 10 \nДата 07.09.2017 \nВыполнены пункты: \n1)bresenham line algo\n2)bresenham circle algo\n3)ellipse algo", "О программе");
 }
 
+
+System::Void sem1::MyForm::random_generate_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	switch (objects->SelectedIndex)
+	{
+	case 0://line
+	{
+		random_click_imitation(2);
+		break;
+	}
+	case 1://circle
+	{
+		random_click_imitation(2);
+		break;
+	}
+	case 2://ellipse
+	{
+		random_click_imitation(3);
+		break;
+	}
+	}
+}
+
+System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	
+}
+
+System::Void sem1::MyForm::random_click_imitation(int click_number)
+{
+	int ex, ey;
+	for (int i = 0; i < click_number; i++)
+	{
+		ex = rand() % static_cast<int>(canvas->Width + 1);
+		ey = rand() % static_cast<int>(canvas->Height + 1);
+		what_to_draw(ex, ey);
+	}
+}
+
+
 System::Void sem1::MyForm::canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+	what_to_draw(e->X, e->Y);
+}
+
+System::Void sem1::MyForm::what_to_draw(int ex, int ey)
+{
 	switch (objects->SelectedIndex)
 	{
 	case 0://line
 	{
 		if (x1 != -1 && y1 != -1)
 		{
-			x2 = e->X;
-			y2 = e->Y;
+			x2 = ex;
+			y2 = ey;
 			existedMethod == false ? bres_line() : im->DrawLine(pen, x1, y1, x2, y2);
 			x1 = -1;
 			y1 = -1;
 		}
 		else {
-			x1 = e->X;
-			y1 = e->Y;
+			x1 = ex;
+			y1 = ey;
 		}
 		break;
 	}
@@ -155,8 +201,8 @@ System::Void sem1::MyForm::canvas_MouseClick(System::Object^  sender, System::Wi
 	{
 		if (x1 != -1 && y1 != -1)
 		{
-			int cur_x = e->X;
-			int cur_y = e->Y;
+			int cur_x = ex;
+			int cur_y = ey;
 			rad_first = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
 			existedMethod == false ? bres_circle() : im->DrawEllipse(pen, x1 - rad_first, y1 - rad_first, rad_first * 2, rad_first * 2);
 			x1 = -1;
@@ -164,8 +210,8 @@ System::Void sem1::MyForm::canvas_MouseClick(System::Object^  sender, System::Wi
 			rad_first = -1;
 		}
 		else {
-			x1 = e->X;
-			y1 = e->Y;
+			x1 = ex;
+			y1 = ey;
 		}
 		break;
 	}
@@ -173,8 +219,8 @@ System::Void sem1::MyForm::canvas_MouseClick(System::Object^  sender, System::Wi
 	{
 		if (x1 != -1 && y1 != -1)
 		{
-			int cur_x = e->X;
-			int cur_y = e->Y;
+			int cur_x = ex;
+			int cur_y = ey;
 			if (rad_first != -1)
 			{
 				rad_second = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
@@ -187,8 +233,8 @@ System::Void sem1::MyForm::canvas_MouseClick(System::Object^  sender, System::Wi
 				rad_first = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
 		}
 		else {
-			x1 = e->X;
-			y1 = e->Y;
+			x1 = ex;
+			y1 = ey;
 		}
 		break;
 	}

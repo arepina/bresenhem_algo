@@ -66,6 +66,8 @@ namespace sem1 {
 	private: System::Windows::Forms::Button^  clear;
 	private: System::Windows::Forms::CheckBox^  existedMethodChecker;
 	private: System::Windows::Forms::ComboBox^  objects;
+	private: System::Windows::Forms::Button^  random_generate;
+	private: System::Windows::Forms::Button^  draw_from_file;
 
 	protected:
 
@@ -89,6 +91,8 @@ namespace sem1 {
 			this->clear = (gcnew System::Windows::Forms::Button());
 			this->existedMethodChecker = (gcnew System::Windows::Forms::CheckBox());
 			this->objects = (gcnew System::Windows::Forms::ComboBox());
+			this->random_generate = (gcnew System::Windows::Forms::Button());
+			this->draw_from_file = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->canvas))->BeginInit();
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -132,7 +136,7 @@ namespace sem1 {
 			// 
 			this->clear->Location = System::Drawing::Point(12, 309);
 			this->clear->Name = L"clear";
-			this->clear->Size = System::Drawing::Size(155, 31);
+			this->clear->Size = System::Drawing::Size(138, 31);
 			this->clear->TabIndex = 5;
 			this->clear->Text = L"Очистить";
 			this->clear->UseVisualStyleBackColor = true;
@@ -157,14 +161,36 @@ namespace sem1 {
 			this->objects->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Отрезок", L"Окружность", L"Эллипс" });
 			this->objects->Location = System::Drawing::Point(12, 43);
 			this->objects->Name = L"objects";
-			this->objects->Size = System::Drawing::Size(121, 21);
+			this->objects->Size = System::Drawing::Size(138, 21);
 			this->objects->TabIndex = 29;
+			// 
+			// random_generate
+			// 
+			this->random_generate->Location = System::Drawing::Point(12, 93);
+			this->random_generate->Name = L"random_generate";
+			this->random_generate->Size = System::Drawing::Size(138, 23);
+			this->random_generate->TabIndex = 30;
+			this->random_generate->Text = L"Рандом";
+			this->random_generate->UseVisualStyleBackColor = true;
+			this->random_generate->Click += gcnew System::EventHandler(this, &MyForm::random_generate_Click);
+			// 
+			// draw_from_file
+			// 
+			this->draw_from_file->Location = System::Drawing::Point(12, 251);
+			this->draw_from_file->Name = L"draw_from_file";
+			this->draw_from_file->Size = System::Drawing::Size(138, 31);
+			this->draw_from_file->TabIndex = 31;
+			this->draw_from_file->Text = L"Рисовать из файла";
+			this->draw_from_file->UseVisualStyleBackColor = true;
+			this->draw_from_file->Click += gcnew System::EventHandler(this, &MyForm::draw_from_file_Click);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(826, 409);
+			this->ClientSize = System::Drawing::Size(826, 365);
+			this->Controls->Add(this->draw_from_file);
+			this->Controls->Add(this->random_generate);
 			this->Controls->Add(this->objects);
 			this->Controls->Add(this->existedMethodChecker);
 			this->Controls->Add(this->clear);
@@ -172,7 +198,7 @@ namespace sem1 {
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
 			this->Name = L"MyForm";
-			this->Text = L"HW";
+			this->Text = L"Repina Anastasia BSE143";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->canvas))->EndInit();
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
@@ -186,11 +212,14 @@ namespace sem1 {
 	public: System::Void bres_line();//bresenham line algo
 	public: System::Void bres_circle();//bresenham circle algo
 	public: System::Void bres_ellipse();//ellipse algo
-	private: System::Void draw_pixels(int x, int y);
+	private: System::Void draw_pixels(int x, int y);//place pixels on canvas
+	private: System::Void what_to_draw(int ex, int ey);//choose what to draw
+	private: System::Void random_click_imitation(int click_number);
 	private: System::Void canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
 	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void clear_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void aboutProgramToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
-
-	};
+	private: System::Void random_generate_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void draw_from_file_Click(System::Object^  sender, System::EventArgs^  e);
+};
 }
