@@ -7,7 +7,14 @@
 //3)ellipse algo
 #pragma once
 #include <cmath>
-
+#include <ctime>
+#include <Windows.h>
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <msclr/marshal_cppstd.h>
+#include <stack> 
+using namespace std;
 namespace sem1 {
 
 	using namespace System;
@@ -30,6 +37,7 @@ namespace sem1 {
 			im = canvas->CreateGraphics();
 			objects->SelectedIndex = 0;
 			blueBrush = gcnew SolidBrush(Color::Blue);
+			greenBrush = gcnew SolidBrush(Color::Green);
 			col = gcnew Color();
 			pen = gcnew Pen(col->Red);
 			x1 = -1;
@@ -38,7 +46,8 @@ namespace sem1 {
 			y2 = -1;
 			rad_first = -1;
 			rad_second = -1;
-			existedMethod = false;
+			existed_method = false;
+			is_zalivka = false;
 		}
 
 	protected:
@@ -56,9 +65,10 @@ namespace sem1 {
 	private: Graphics ^im;
 	private: Color ^col;
 	private: SolidBrush^ blueBrush;
+	private: SolidBrush^ greenBrush;
 	private: Pen ^pen;
 	private: int x1, y1, x2, y2, rad_first, rad_second;
-	private: bool existedMethod;
+	private: bool existed_method, is_zalivka;
 	private: System::Windows::Forms::PictureBox^  canvas;
 	private: System::Windows::Forms::MenuStrip^  menuStrip1;
 	private: System::Windows::Forms::ToolStripMenuItem^  createObjectToolStripMenuItem;
@@ -68,6 +78,7 @@ namespace sem1 {
 	private: System::Windows::Forms::ComboBox^  objects;
 	private: System::Windows::Forms::Button^  random_generate;
 	private: System::Windows::Forms::Button^  draw_from_file;
+	private: System::Windows::Forms::CheckBox^  zalivka;
 
 	protected:
 
@@ -93,6 +104,7 @@ namespace sem1 {
 			this->objects = (gcnew System::Windows::Forms::ComboBox());
 			this->random_generate = (gcnew System::Windows::Forms::Button());
 			this->draw_from_file = (gcnew System::Windows::Forms::Button());
+			this->zalivka = (gcnew System::Windows::Forms::CheckBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->canvas))->BeginInit();
 			this->menuStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -170,7 +182,7 @@ namespace sem1 {
 			this->random_generate->Name = L"random_generate";
 			this->random_generate->Size = System::Drawing::Size(138, 23);
 			this->random_generate->TabIndex = 30;
-			this->random_generate->Text = L"Рандом";
+			this->random_generate->Text = L"Рандомная генерация";
 			this->random_generate->UseVisualStyleBackColor = true;
 			this->random_generate->Click += gcnew System::EventHandler(this, &MyForm::random_generate_Click);
 			// 
@@ -184,11 +196,23 @@ namespace sem1 {
 			this->draw_from_file->UseVisualStyleBackColor = true;
 			this->draw_from_file->Click += gcnew System::EventHandler(this, &MyForm::draw_from_file_Click);
 			// 
+			// zalivka
+			// 
+			this->zalivka->AutoSize = true;
+			this->zalivka->Location = System::Drawing::Point(12, 122);
+			this->zalivka->Name = L"zalivka";
+			this->zalivka->Size = System::Drawing::Size(106, 17);
+			this->zalivka->TabIndex = 32;
+			this->zalivka->Text = L"Режим заливки";
+			this->zalivka->UseVisualStyleBackColor = true;
+			this->zalivka->CheckedChanged += gcnew System::EventHandler(this, &MyForm::zalivka_CheckedChanged);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(826, 365);
+			this->Controls->Add(this->zalivka);
 			this->Controls->Add(this->draw_from_file);
 			this->Controls->Add(this->random_generate);
 			this->Controls->Add(this->objects);
@@ -214,12 +238,16 @@ namespace sem1 {
 	public: System::Void bres_ellipse();//ellipse algo
 	private: System::Void draw_pixels(int x, int y);//place pixels on canvas
 	private: System::Void what_to_draw(int ex, int ey);//choose what to draw
-	private: System::Void random_click_imitation(int click_number);
-	private: System::Void canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);
-	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void clear_Click(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void aboutProgramToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void random_generate_Click(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void draw_from_file_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void random_click_imitation(int click_number);//imitate the figures random
+	private: System::Void draw_objects(int ex, int ey);
+	private: System::Void draw_zalivka(int ex, int ey);
+	private: System::Void row_by_row_zalivka(stack<pair<int, int>> pixel, int ex, int ey,int w, int h, Bitmap ^b, SolidBrush^ fill_color);
+	private: System::Void canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);//clicked on canvas
+	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e);//changed the drawing way
+	private: System::Void clear_Click(System::Object^  sender, System::EventArgs^  e);//clear the canvas
+	private: System::Void aboutProgramToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);//info
+	private: System::Void random_generate_Click(System::Object^  sender, System::EventArgs^  e);////random button clicked
+	private: System::Void draw_from_file_Click(System::Object^  sender, System::EventArgs^  e);//draw from file
+	private: System::Void zalivka_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 };
 }

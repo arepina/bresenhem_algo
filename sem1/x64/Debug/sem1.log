@@ -1,0 +1,7 @@
+﻿  MyForm.cpp
+MyForm.cpp(20): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+MyForm.cpp(83): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+MyForm.cpp(279): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  MyForm.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
+  sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.exe
+  sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.pdb (Partial PDB)

@@ -1,12 +1,20 @@
+//Программа выполнена студенткой группы БПИ143(1) Репиной Анастасией Андреевной. 
+//Среда разработки: Visual Studio 2015 Entherprise, ОС Windows 10
+//Дата 07.09.2017
+//Выполнены пункты:
+//1)bresenham line algo
+//2)bresenham circle algo
+//3)ellipse algo
 #include "MyForm.h"
 #include <ctime>
 #include <Windows.h>
 #include <fstream>
 #include <string>
-#include <iostream>
 #include <msclr/marshal_cppstd.h>
-using namespace sem1; //пространство имен из заголовочного файла формы !!!
-[STAThread]
+
+using namespace sem1;
+using namespace std;
+
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	srand(time(0));
@@ -67,7 +75,7 @@ ellipse algo
 System::Void sem1::MyForm::bres_ellipse()
 {
 	int x = 0;
-	int y = rad_second; 
+	int y = rad_second;
 	int sigma = 0;
 	int a = rad_first;
 	int b = rad_second;
@@ -117,6 +125,97 @@ System::Void sem1::MyForm::bres_ellipse()
 
 #pragma endregion Bresenham algo
 
+#pragma region Zalivka
+
+System::Void sem1::MyForm::row_by_row_zalivka(stack<pair<int, int>> pixel, int ex, int ey, int width, int height, Bitmap ^b, SolidBrush^ fill_color)
+{
+	pair<int, int> current;	
+	Color^ selected_pixel_color = b->GetPixel(ex, ey);
+	Color^ current_pixel_colour;
+	while (!pixel.empty()) {
+		current = pixel.top();
+		pixel.pop();
+		int cur_x = current.first;
+		int cur_y = current.second;
+		int start_x = cur_x;//remember the start point
+		im->FillRectangle(greenBrush, current.first, current.second, 1, 1);
+		current_pixel_colour = b->GetPixel(cur_x, cur_y);
+		//go to the right
+		cur_x = cur_x + 1;
+		while (current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color)) {
+			im->FillRectangle(greenBrush, cur_x, cur_y, 1, 1);
+			cur_x = cur_x + 1;
+			current_pixel_colour = b->GetPixel(cur_x, cur_y);
+		}
+		//save the most right pixel
+		int xright = cur_x - 1;
+		//go to the left from start point
+		cur_x = start_x - 1;
+		while (current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color)) {
+			im->FillRectangle(greenBrush, cur_x, cur_y, 1, 1);
+			cur_x = cur_x - 1;
+			current_pixel_colour = b->GetPixel(cur_x, cur_y);
+		}
+		//save the most left pixel
+		int xleft = cur_x + 1;
+		cur_x = start_x;		
+		cur_y = cur_y - 1;//go down
+		cur_x = xleft;
+		while (cur_x <= xright) {
+			int Fl = 0;
+			//check all the pixels from left to rigth. if we need to color any of them, remember the rightest pixel in cur_x
+			while (current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color) && cur_x <= xright) {
+				if (Fl == 0)
+					Fl = 1;
+				cur_x = cur_x + 1;
+				current_pixel_colour = b->GetPixel(cur_x, cur_y);
+			}
+			if (Fl == 1) {//add the pixel to the stack depending on its position
+				if (cur_x == xright && current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color))
+					pixel.push(make_pair(cur_x, cur_y));
+				else
+					pixel.push(make_pair(cur_x - 1, cur_y));
+				Fl = 0;
+			}
+			start_x = cur_x;//make the new start pixel
+			while (!current_pixel_colour->Equals(selected_pixel_color) && current_pixel_colour->Equals(fill_color->Color) && cur_x < xright) {
+				cur_x = cur_x + 1;
+				current_pixel_colour = b->GetPixel(cur_x, cur_y);
+			}
+			if (cur_x == start_x) {
+				cur_x = cur_x + 1;
+				current_pixel_colour = b->GetPixel(cur_x, cur_y);
+			}
+		}
+		//go up above the start line
+		cur_y = cur_y + 2;
+		cur_x = xleft;
+		while (cur_x <= xright) {
+			int Fl = 0;
+			while (current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color) && cur_x <= xright) {
+				if (Fl == 0)
+					Fl = 1;
+				cur_x = cur_x + 1;
+			}
+			if (Fl == 1) {
+				if (cur_x == xright && current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color))
+					pixel.push(make_pair(cur_x, cur_y));
+				else
+					pixel.push(make_pair(cur_x - 1, cur_y));
+				Fl = 0;
+			}
+			start_x = cur_x;
+			while (!current_pixel_colour->Equals(selected_pixel_color) && current_pixel_colour->Equals(fill_color->Color) && cur_x < xright)
+				cur_x = cur_x + 1;
+			if (cur_x == start_x)
+				cur_x = cur_x + 1;
+		}		
+	}
+}
+
+
+#pragma endregion Zalivka
+
 #pragma region Form events
 System::Void sem1::MyForm::clear_Click(System::Object^  sender, System::EventArgs^  e) {
 	cleanCanvas();
@@ -148,17 +247,17 @@ System::Void sem1::MyForm::random_generate_Click(System::Object ^ sender, System
 	}
 }
 
-void split(const std::string& s, char c,
-	std::vector<std::string>& v) {
-	std::string::size_type i = 0;
-	std::string::size_type j = s.find(c);
+void split(const string& s, char c,
+	vector<string>& v) {
+	string::size_type i = 0;
+	string::size_type j = s.find(c);
 
-	while (j != std::string::npos) {
+	while (j != string::npos) {
 		v.push_back(s.substr(i, j - i));
 		i = ++j;
 		j = s.find(c, j);
 
-		if (j == std::string::npos)
+		if (j == string::npos)
 			v.push_back(s.substr(i, s.length()));
 	}
 }
@@ -170,16 +269,16 @@ System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System:
 	if (fd->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 	{
 		String^ filename = fd->FileName;
-		std::string line;
-		std::string converted_filename = msclr::interop::marshal_as< std::string >(filename);
-		std::ifstream myfile(converted_filename);
+		string line;
+		string converted_filename = msclr::interop::marshal_as<string>(filename);
+		ifstream myfile(converted_filename);
 		if (myfile.is_open())
 		{
 			while (getline(myfile, line))
 			{
 				int index = line.find_first_of(" ");
-				std::string figure_name = line.substr(0, index);
-				std::vector<std::string> v;
+				string figure_name = line.substr(0, index);
+				vector<string> v;
 				split(line, ' ', v);
 				if (v.at(0) == "line")
 				{
@@ -200,12 +299,17 @@ System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System:
 					what_to_draw(stoi(v.at(3)), stoi(v.at(4)));
 					what_to_draw(stoi(v.at(5)), stoi(v.at(6)));
 				}
-				
+
 			}
 			myfile.close();
 		}
-		
+
 	}
+}
+
+System::Void sem1::MyForm::zalivka_CheckedChanged(System::Object ^ sender, System::EventArgs ^ e)
+{
+	is_zalivka = !is_zalivka;
 }
 
 System::Void sem1::MyForm::random_click_imitation(int click_number)
@@ -224,13 +328,23 @@ System::Void sem1::MyForm::canvas_MouseClick(System::Object^  sender, System::Wi
 }
 
 System::Void sem1::MyForm::existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
-	existedMethod = !existedMethod;//do we use existed methods or the bresenham algo
+	existed_method = !existed_method;//do we use existed methods or the bresenham algo
 }
 
 #pragma endregion Form events
 
 #pragma region Drawing
-System::Void sem1::MyForm::what_to_draw(int ex, int ey)
+
+System::Void sem1::MyForm::draw_zalivka(int ex, int ey)
+{
+	stack<pair<int, int>> pixel;
+	pixel.push(make_pair(ex, ey));
+	im->FillRectangle(greenBrush, 0, 0, 1, 1);
+	Bitmap^ b = gcnew Bitmap(canvas->InitialImage);
+	row_by_row_zalivka(pixel, ex, ey, canvas->Width, canvas->Height, b, greenBrush);
+}
+
+System::Void sem1::MyForm::draw_objects(int ex, int ey)
 {
 	switch (objects->SelectedIndex)
 	{
@@ -240,7 +354,7 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 		{
 			x2 = ex;
 			y2 = ey;
-			existedMethod == false ? bres_line() : im->DrawLine(pen, x1, y1, x2, y2);
+			existed_method == false ? bres_line() : im->DrawLine(pen, x1, y1, x2, y2);
 			x1 = -1;
 			y1 = -1;
 		}
@@ -257,7 +371,7 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 			int cur_x = ex;
 			int cur_y = ey;
 			rad_first = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
-			existedMethod == false ? bres_circle() : im->DrawEllipse(pen, x1 - rad_first, y1 - rad_first, rad_first * 2, rad_first * 2);
+			existed_method == false ? bres_circle() : im->DrawEllipse(pen, x1 - rad_first, y1 - rad_first, rad_first * 2, rad_first * 2);
 			x1 = -1;
 			y1 = -1;
 			rad_first = -1;
@@ -277,7 +391,7 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 			if (rad_first != -1)
 			{
 				rad_second = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
-				existedMethod == false ? bres_ellipse() : im->DrawEllipse(pen, x1 - rad_first, y1 - rad_first, rad_first * 2, rad_second * 2);
+				existed_method == false ? bres_ellipse() : im->DrawEllipse(pen, x1 - rad_first, y1 - rad_first, rad_first * 2, rad_second * 2);
 				x1 = -1;
 				y1 = -1;
 				rad_first = -1;
@@ -294,6 +408,14 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 	}
 }
 
+System::Void sem1::MyForm::what_to_draw(int ex, int ey)
+{
+	if (!is_zalivka)
+		draw_objects(ex, ey);
+	else
+		draw_zalivka(ex, ey);
+}
+
 System::Void sem1::MyForm::draw_pixels(int x, int y)
 {
 	im->FillRectangle(blueBrush, x + x1, y + y1, 1, 1);
@@ -302,9 +424,6 @@ System::Void sem1::MyForm::draw_pixels(int x, int y)
 	im->FillRectangle(blueBrush, x1 - x, y1 - y, 1, 1);
 }
 
-/*
-clean the canvas
-*/
 System::Void sem1::MyForm::cleanCanvas()
 {
 	im->Clear(col->White);
