@@ -1,5 +1,5 @@
 ﻿  MyForm.cpp
-MyForm.cpp(7): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-MyForm.cpp(77): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  .NETFramework,Version=v4.5.2.AssemblyAttributes.cpp
-  sem1.vcxproj -> C:\Users\aarep\Downloads\bresenhem_algo\Debug\sem1.exe
+MyForm.cpp(12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+MyForm.cpp(75): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+MyForm.cpp(168): error C3867: 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::length': non-standard syntax; use '&' to create a pointer to member
+MyForm.cpp(168): error C3861: 'split': identifier not found

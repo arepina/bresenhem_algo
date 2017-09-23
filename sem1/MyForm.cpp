@@ -1,7 +1,12 @@
 #include "MyForm.h"
 #include <ctime>
 #include <Windows.h>
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <msclr/marshal_cppstd.h>
 using namespace sem1; //пространство имен из заголовочного файла формы !!!
+[STAThread]
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	srand(time(0));
@@ -11,14 +16,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	return 0;
 }
 
-/*
-clean the canvas
-*/
-System::Void sem1::MyForm::cleanCanvas()
-{
-	im->Clear(col->White);
-}
-
+#pragma region Bresenham
 /*
 bresenham line algo
 */
@@ -117,14 +115,9 @@ System::Void sem1::MyForm::bres_ellipse()
 	} while (true);
 }
 
-System::Void sem1::MyForm::draw_pixels(int x, int y)
-{
-	im->FillRectangle(blueBrush, x + x1, y + y1, 1, 1);
-	im->FillRectangle(blueBrush, x1 - x, y + y1, 1, 1);
-	im->FillRectangle(blueBrush, x + x1, y1 - y, 1, 1);
-	im->FillRectangle(blueBrush, x1 - x, y1 - y, 1, 1);
-}
+#pragma endregion Bresenham algo
 
+#pragma region Form events
 System::Void sem1::MyForm::clear_Click(System::Object^  sender, System::EventArgs^  e) {
 	cleanCanvas();
 }
@@ -132,7 +125,6 @@ System::Void sem1::MyForm::clear_Click(System::Object^  sender, System::EventArg
 System::Void sem1::MyForm::aboutProgramToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 	MessageBox::Show("Программа выполнена студенткой группы БПИ143(1) \nРепиной Анастасией Андреевной \nСреда разработки: Visual Studio 2015 Entherprise \nОС Windows 10 \nДата 07.09.2017 \nВыполнены пункты: \n1)bresenham line algo\n2)bresenham circle algo\n3)ellipse algo", "О программе");
 }
-
 
 System::Void sem1::MyForm::random_generate_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
@@ -158,7 +150,40 @@ System::Void sem1::MyForm::random_generate_Click(System::Object ^ sender, System
 
 System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
-	
+	OpenFileDialog ^fd = gcnew OpenFileDialog;
+	fd->InitialDirectory = "c:\\";
+	fd->Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+	if (fd->ShowDialog() == System::Windows::Forms::DialogResult::OK)
+	{
+		String^ filename = fd->FileName;
+		std::string line;
+		std::string converted_filename = msclr::interop::marshal_as< std::string >(filename);
+		std::ifstream myfile(converted_filename);
+		if (myfile.is_open())
+		{
+			while (getline(myfile, line))
+			{
+				int index = line.find_first_of(" ");
+				std::string figure_name = line.substr(0, index);
+				std::vector<std::string> parts = split(line, ' ', line.length);
+				int f = 4;
+			}
+			myfile.close();
+		}
+		
+	}
+}
+
+std::vector<std::string> split(std::string value, char separator, int LENG)
+{
+	std::vector<std::string> result;
+	for (int i = 1; i <= LENG; i++)
+	{
+		std::string::size_type pos = value.find_first_of(separator);
+		value = value.substr(0, pos) + "%" + value.substr(pos + 1);
+		result.push_back(value.substr(0, pos));
+	}
+	return result;
 }
 
 System::Void sem1::MyForm::random_click_imitation(int click_number)
@@ -172,11 +197,17 @@ System::Void sem1::MyForm::random_click_imitation(int click_number)
 	}
 }
 
-
 System::Void sem1::MyForm::canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
 	what_to_draw(e->X, e->Y);
 }
 
+System::Void sem1::MyForm::existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+	existedMethod = !existedMethod;//do we use existed methods or the bresenham algo
+}
+
+#pragma endregion Form events
+
+#pragma region Drawing
 System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 {
 	switch (objects->SelectedIndex)
@@ -241,6 +272,19 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 	}
 }
 
-System::Void sem1::MyForm::existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
-	existedMethod = !existedMethod;//do we use existed methods or the bresenham algo
+System::Void sem1::MyForm::draw_pixels(int x, int y)
+{
+	im->FillRectangle(blueBrush, x + x1, y + y1, 1, 1);
+	im->FillRectangle(blueBrush, x1 - x, y + y1, 1, 1);
+	im->FillRectangle(blueBrush, x + x1, y1 - y, 1, 1);
+	im->FillRectangle(blueBrush, x1 - x, y1 - y, 1, 1);
 }
+
+/*
+clean the canvas
+*/
+System::Void sem1::MyForm::cleanCanvas()
+{
+	im->Clear(col->White);
+}
+#pragma endregion Drawing
