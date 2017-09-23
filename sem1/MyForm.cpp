@@ -340,8 +340,11 @@ System::Void sem1::MyForm::draw_zalivka(int ex, int ey)
 	stack<pair<int, int>> pixel;
 	pixel.push(make_pair(ex, ey));
 	im->FillRectangle(greenBrush, 0, 0, 1, 1);
-	Bitmap^ b = gcnew Bitmap(canvas->InitialImage);
-	row_by_row_zalivka(pixel, ex, ey, canvas->Width, canvas->Height, b, greenBrush);
+	Bitmap^ bb = gcnew Bitmap(canvas->Width, canvas->Height);
+	canvas->DrawToBitmap(bb, canvas->ClientRectangle);
+
+	//Bitmap^ b = gcnew Bitmap(canvas->InitialImage);
+	row_by_row_zalivka(pixel, ex, ey, canvas->Width, canvas->Height, bb, greenBrush);
 }
 
 System::Void sem1::MyForm::draw_objects(int ex, int ey)
