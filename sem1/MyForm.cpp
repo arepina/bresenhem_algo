@@ -148,10 +148,24 @@ System::Void sem1::MyForm::random_generate_Click(System::Object ^ sender, System
 	}
 }
 
+void split(const std::string& s, char c,
+	std::vector<std::string>& v) {
+	std::string::size_type i = 0;
+	std::string::size_type j = s.find(c);
+
+	while (j != std::string::npos) {
+		v.push_back(s.substr(i, j - i));
+		i = ++j;
+		j = s.find(c, j);
+
+		if (j == std::string::npos)
+			v.push_back(s.substr(i, s.length()));
+	}
+}
+
 System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	OpenFileDialog ^fd = gcnew OpenFileDialog;
-	fd->InitialDirectory = "c:\\";
 	fd->Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
 	if (fd->ShowDialog() == System::Windows::Forms::DialogResult::OK)
 	{
@@ -165,25 +179,33 @@ System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System:
 			{
 				int index = line.find_first_of(" ");
 				std::string figure_name = line.substr(0, index);
-				std::vector<std::string> parts = split(line, ' ', line.length);
-				int f = 4;
+				std::vector<std::string> v;
+				split(line, ' ', v);
+				if (v.at(0) == "line")
+				{
+					objects->SelectedIndex = 0;
+					what_to_draw(stoi(v.at(1)), stoi(v.at(2)));
+					what_to_draw(stoi(v.at(3)), stoi(v.at(4)));
+				}
+				if (v.at(0) == "circle")
+				{
+					objects->SelectedIndex = 1;
+					what_to_draw(stoi(v.at(1)), stoi(v.at(2)));
+					what_to_draw(stoi(v.at(3)), stoi(v.at(4)));
+				}
+				if (v.at(0) == "ellipse")
+				{
+					objects->SelectedIndex = 2;
+					what_to_draw(stoi(v.at(1)), stoi(v.at(2)));
+					what_to_draw(stoi(v.at(3)), stoi(v.at(4)));
+					what_to_draw(stoi(v.at(5)), stoi(v.at(6)));
+				}
+				
 			}
 			myfile.close();
 		}
 		
 	}
-}
-
-std::vector<std::string> split(std::string value, char separator, int LENG)
-{
-	std::vector<std::string> result;
-	for (int i = 1; i <= LENG; i++)
-	{
-		std::string::size_type pos = value.find_first_of(separator);
-		value = value.substr(0, pos) + "%" + value.substr(pos + 1);
-		result.push_back(value.substr(0, pos));
-	}
-	return result;
 }
 
 System::Void sem1::MyForm::random_click_imitation(int click_number)
