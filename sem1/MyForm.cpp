@@ -238,7 +238,7 @@ System::Void sem1::MyForm::window(int ex, int ey)
 		else
 			y2_cut = ey;
 		System::Drawing::Rectangle rect = System::Drawing::Rectangle(x1_cut, y1_cut, abs(x2_cut - x1_cut), abs(y2_cut - y1_cut));
-		im->DrawRectangle(pen, rect);
+		im->DrawRectangle(gcnew Pen(current_color->BackColor), rect);
 		process_lines_cut(x1_cut, y1_cut, x2_cut, y2_cut);
 		x1_cut = -1;
 		y1_cut = -1;
@@ -437,9 +437,16 @@ System::Void sem1::MyForm::existedMethodChecker_CheckedChanged(System::Object^  
 
 System::Void sem1::MyForm::draw_line_by_line(int ex, int ey)
 {
-	/*stack<pair<int, int>> l;
+	ex = 10;
+	ey = 10;
+	/*Bitmap^ bm = gcnew Bitmap(canvas->Width, canvas->Height);*/
+	Color^ co = bm->GetPixel(ex, ey);
+	int f = 4;
+	/*stack<pair<int, int>> pixel;
 	pixel.push(make_pair(ex, ey));
-	im->FillRectangle(greenBrush, 0, 0, 1, 1);
+	Pen^p = gcnew Pen(colorDialog1->Color);
+	Brush^ v = gcnew SolidBrush(p->Color);
+	im->FillRectangle(v, 0, 0, 1, 1);
 	im->FillRectangle(greenBrush, 10, 10, 1, 1);
 	Bitmap^ bb = gcnew Bitmap(canvas->Image);	
 	//bb = gcnew Bitmap(canvas->InitialImage);
@@ -470,7 +477,7 @@ System::Void sem1::MyForm::draw_objects(int ex, int ey)
 		{
 			x2 = ex;
 			y2 = ey;
-			existed_method == false ? bres_line() : im->DrawLine(pen, x1, y1, x2, y2);
+			existed_method == false ? bres_line() : im->DrawLine(gcnew Pen(current_color->BackColor), x1, y1, x2, y2);
 			pair<int*, int*> p1 = make_pair((int*)x1, (int*)y1);
 			pair<int*, int*> p2 = make_pair((int*)x2, (int*)y2);
 			pair<pair<int*, int*>, pair<int*, int*>> p_sum = make_pair(p1, p2);
@@ -491,7 +498,7 @@ System::Void sem1::MyForm::draw_objects(int ex, int ey)
 			int cur_x = ex;
 			int cur_y = ey;
 			rad_first = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
-			existed_method == false ? bres_circle() : im->DrawEllipse(pen, x1 - rad_first, y1 - rad_first, rad_first * 2, rad_first * 2);
+			existed_method == false ? bres_circle() : im->DrawEllipse(gcnew Pen(current_color->BackColor), x1 - rad_first, y1 - rad_first, rad_first * 2, rad_first * 2);
 			x1 = -1;
 			y1 = -1;
 			rad_first = -1;
@@ -511,7 +518,7 @@ System::Void sem1::MyForm::draw_objects(int ex, int ey)
 			if (rad_first != -1)
 			{
 				rad_second = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
-				existed_method == false ? bres_ellipse() : im->DrawEllipse(pen, x1 - rad_first, y1 - rad_first, rad_first * 2, rad_second * 2);
+				existed_method == false ? bres_ellipse() : im->DrawEllipse(gcnew Pen(current_color->BackColor), x1 - rad_first, y1 - rad_first, rad_first * 2, rad_second * 2);
 				x1 = -1;
 				y1 = -1;
 				rad_first = -1;
@@ -538,7 +545,8 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 	else if (is_line_by_line)
 		draw_line_by_line(ex, ey);
 	else if (is_xor)
-		draw_xor(ex, ey);	
+		draw_xor(ex, ey);
+	canvas->Refresh();
 }
 
 System::Void sem1::MyForm::draw_pixels(int x, int y)
@@ -552,7 +560,8 @@ System::Void sem1::MyForm::draw_pixels(int x, int y)
 
 System::Void sem1::MyForm::cleanCanvas()
 {
-	im->Clear(col->White);
+	im->Clear(Color::White);
 	lines_vector->clear();
+	canvas->Refresh();
 }
 #pragma endregion Drawing

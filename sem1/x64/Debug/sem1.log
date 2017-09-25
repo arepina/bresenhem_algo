@@ -11,8 +11,8 @@ MyForm.cpp(257): warning C4302: 'type cast': truncation from 'int *' to 'int'
 MyForm.cpp(258): warning C4311: 'type cast': pointer truncation from 'int *' to 'int'
 MyForm.cpp(258): warning C4302: 'type cast': truncation from 'int *' to 'int'
 MyForm.cpp(324): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-MyForm.cpp(474): warning C4312: 'type cast': conversion from 'int' to 'int *' of greater size
-MyForm.cpp(475): warning C4312: 'type cast': conversion from 'int' to 'int *' of greater size
+MyForm.cpp(481): warning C4312: 'type cast': conversion from 'int' to 'int *' of greater size
+MyForm.cpp(482): warning C4312: 'type cast': conversion from 'int' to 'int *' of greater size
   MyForm.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
   sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.exe
   sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.pdb (Partial PDB)

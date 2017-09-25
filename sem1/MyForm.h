@@ -33,10 +33,10 @@ namespace sem1 {
 	public:
 		MyForm(void)
 		{
-			InitializeComponent();
-			col = gcnew Color();
-			pen = gcnew Pen(col->Red);
-			im = canvas->CreateGraphics();
+			InitializeComponent();			
+			bm = gcnew Bitmap(canvas->Width, canvas->Height);
+			canvas->Image = bm;
+			im = Graphics::FromImage(bm);
 			current_color->BackColor = Color::Blue;
 			objects->SelectedIndex = 0;			
 			x1 = -1;
@@ -53,7 +53,7 @@ namespace sem1 {
 			is_line_by_line = true;
 			is_xor = false;
 			is_window_mode = false;
-			lines_vector = new vector<pair<pair<int*, int*>, pair<int*, int*>>>;			
+			lines_vector = new vector<pair<pair<int*, int*>, pair<int*, int*>>>;	
 		}
 
 	protected:
@@ -68,9 +68,8 @@ namespace sem1 {
 			}
 		}
 
+	private: Bitmap ^bm;
 	private: Graphics ^im;
-	private: Color ^col;
-	private: Pen ^pen;
 	private: vector<pair<pair<int*, int*>, pair<int*, int*>>>* lines_vector;
 	private: int x1, y1, x2, y2, rad_first, rad_second, x1_cut, y1_cut, x2_cut, y2_cut;
 	private: bool existed_method, is_line_by_line, is_xor, is_window_mode;
