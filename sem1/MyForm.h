@@ -14,7 +14,13 @@
 #include <iostream>
 #include <msclr/marshal_cppstd.h>
 #include <stack> 
+
 using namespace std;
+
+#include "Bresenhem.h"
+#include "Fill.h"
+#include "Cut.h"
+
 namespace sem1 {
 
 	using namespace System;
@@ -33,12 +39,12 @@ namespace sem1 {
 	public:
 		MyForm(void)
 		{
-			InitializeComponent();			
+			InitializeComponent();
 			bm = gcnew Bitmap(canvas->Width, canvas->Height);
 			canvas->Image = bm;
 			im = Graphics::FromImage(bm);
 			current_color->BackColor = Color::Blue;
-			objects->SelectedIndex = 0;			
+			objects->SelectedIndex = 0;
 			x1 = -1;
 			y1 = -1;
 			x2 = -1;
@@ -53,7 +59,7 @@ namespace sem1 {
 			is_line_by_line = true;
 			is_xor = false;
 			is_window_mode = false;
-			lines_vector = new vector<pair<pair<int*, int*>, pair<int*, int*>>>;	
+			lines_vector = new vector<pair<pair<int*, int*>, pair<int*, int*>>>;
 		}
 
 	protected:
@@ -68,33 +74,33 @@ namespace sem1 {
 			}
 		}
 
-	private: Bitmap ^bm;
-	private: Graphics ^im;
-	private: vector<pair<pair<int*, int*>, pair<int*, int*>>>* lines_vector;
-	private: int x1, y1, x2, y2, rad_first, rad_second, x1_cut, y1_cut, x2_cut, y2_cut;
-	private: bool existed_method, is_line_by_line, is_xor, is_window_mode;
+	public: static Bitmap ^bm;
+			static Graphics ^im;
+			vector<pair<pair<int*, int*>, pair<int*, int*>>>* lines_vector;
+			int x1, y1, x2, y2, rad_first, rad_second, x1_cut, y1_cut, x2_cut, y2_cut;
+			bool existed_method, is_line_by_line, is_xor, is_window_mode;
 	private: System::Windows::Forms::PictureBox^  canvas;
-	private: System::Windows::Forms::MenuStrip^  menuStrip1;
-	private: System::Windows::Forms::ToolStripMenuItem^  createObjectToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  aboutProgramToolStripMenuItem;
-	private: System::Windows::Forms::Button^  clear;
-	private: System::Windows::Forms::CheckBox^  existedMethodChecker;
-	private: System::Windows::Forms::ComboBox^  objects;
-	private: System::Windows::Forms::Button^  random_generate;
-	private: System::Windows::Forms::Button^  draw_from_file;
-	private: System::Windows::Forms::GroupBox^  fill_groupbox;
-	private: System::Windows::Forms::RadioButton^  xor_fill;
-	private: System::Windows::Forms::RadioButton^  line_by_line_fill;
-	private: System::Windows::Forms::GroupBox^  draw_groupbox;
-	private: System::Windows::Forms::ToolStripMenuItem^  fillToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  cutToolStripMenuItem;
-	private: System::Windows::Forms::GroupBox^  cut_groupbox;
-	private: System::Windows::Forms::Button^  load_lines;
-	private: System::Windows::Forms::CheckBox^  window_mode;
-	private: System::Windows::Forms::ColorDialog^  colorDialog1;
-	private: System::Windows::Forms::Button^  color_chooser;
-	private: System::Windows::Forms::PictureBox^  current_color;
-	private: System::Windows::Forms::Label^  label2;
+			 System::Windows::Forms::MenuStrip^  menuStrip1;
+			 System::Windows::Forms::ToolStripMenuItem^  createObjectToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  aboutProgramToolStripMenuItem;
+			 System::Windows::Forms::Button^  clear;
+			 System::Windows::Forms::CheckBox^  existedMethodChecker;
+			 System::Windows::Forms::ComboBox^  objects;
+			 System::Windows::Forms::Button^  random_generate;
+			 System::Windows::Forms::Button^  draw_from_file;
+			 System::Windows::Forms::GroupBox^  fill_groupbox;
+			 System::Windows::Forms::RadioButton^  xor_fill;
+			 System::Windows::Forms::RadioButton^  line_by_line_fill;
+			 System::Windows::Forms::GroupBox^  draw_groupbox;
+			 System::Windows::Forms::ToolStripMenuItem^  fillToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  cutToolStripMenuItem;
+			 System::Windows::Forms::GroupBox^  cut_groupbox;
+			 System::Windows::Forms::Button^  load_lines;
+			 System::Windows::Forms::CheckBox^  window_mode;
+			 System::Windows::Forms::ColorDialog^  colorDialog1;
+			 System::Windows::Forms::Button^  color_chooser;
+			 System::Windows::Forms::PictureBox^  current_color;
+			 System::Windows::Forms::Label^  label2;
 
 	protected:
 
@@ -387,20 +393,12 @@ namespace sem1 {
 #pragma endregion
 
 	private: void cleanCanvas();
-	public: System::Void bres_line();//bresenham line algo
-	public: System::Void bres_circle();//bresenham circle algo
-	public: System::Void bres_ellipse();//ellipse algo
-	private: System::Void draw_pixels(int x, int y);//place pixels on canvas
 	private: System::Void what_to_draw(int ex, int ey);//choose what to draw
 	private: System::Void random_click_imitation(int click_number);//imitate the figures random
 	private: System::Void draw_objects(int ex, int ey);
 	private: System::Void draw_line_by_line(int ex, int ey);
 	private: System::Void draw_xor(int ex, int ey);
 	private: System::Void draw_window(int ex, int ey);
-	private: System::Void row_by_row_zalivka(stack<pair<int, int>> pixel, int ex, int ey, SolidBrush^ fill_color);
-	private: System::Void xor_zalivka(int ex, int ey);
-	private: System::Void window(int ex, int ey);
-	private: System::Void process_lines_cut(int x1_cut, int y1_cut, int x2_cut, int y2_cut);
 	private: System::Void canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);//clicked on canvas
 	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e);//changed the drawing way
 	private: System::Void clear_Click(System::Object^  sender, System::EventArgs^  e);//clear the canvas
@@ -415,5 +413,5 @@ namespace sem1 {
 	private: System::Void load_lines_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void window_mode_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void color_chooser_Click(System::Object^  sender, System::EventArgs^  e);
-};
+	};
 }

@@ -17,7 +17,21 @@ Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c5619
 Class sem1.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Methods:
-    bres_line(): PrivateScope, Public, HideBySig
-    bres_circle(): PrivateScope, Public, HideBySig
-    bres_ellipse(): PrivateScope, Public, HideBySig
+  Fields:
+    std.vector<std::pair<std::pair<int \*\,int \*>\,std::pair<int \*\,int \*> >\,std::allocator<std::pair<std::pair<int \*\,int \*>\,std::pair<int \*\,int \*> > > >* lines_vector : Public
+    Int32 x1 : Public
+    Int32 y1 : Public
+    Int32 x2 : Public
+    Int32 y2 : Public
+    Int32 rad_first : Public
+    Int32 rad_second : Public
+    Int32 x1_cut : Public
+    Int32 y1_cut : Public
+    Int32 x2_cut : Public
+    Int32 y2_cut : Public
+    Boolean existed_method : Public
+    Boolean is_line_by_line : Public
+    Boolean is_xor : Public
+    Boolean is_window_mode : Public
+    System.Drawing.Bitmap bm : Public, Static
+    System.Drawing.Graphics im : Public, Static

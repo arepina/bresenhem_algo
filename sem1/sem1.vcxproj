@@ -131,12 +131,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bresenhem.cpp" />
+    <ClCompile Include="Cut.cpp" />
     <ClCompile Include="MyForm.cpp" />
+    <ClCompile Include="Fill.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bresenhem.h" />
+    <ClInclude Include="Cut.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Fill.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">

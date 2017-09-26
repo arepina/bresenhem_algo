@@ -6,262 +6,18 @@
 //2)bresenham circle algo
 //3)ellipse algo
 #include "MyForm.h"
-#include <ctime>
-#include <Windows.h>
-#include <fstream>
-#include <string>
-#include <msclr/marshal_cppstd.h>
 
 using namespace sem1;
 using namespace std;
 [STAThread]
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-	srand(time(0));
+	srand((unsigned int)time(0));
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
 	Application::Run(gcnew MyForm);
 	return 0;
 }
-
-#pragma region Bresenham
-/*
-bresenham line algo
-*/
-System::Void sem1::MyForm::bres_line()
-{
-	int x = x1;
-	int y = y1;
-	int delta_x = abs(x2 - x1);
-	int delta_y = abs(y2 - y1);
-	int s1 = x2 - x1 >= 0 ? 1 : -1;
-	int s2 = y2 - y1 >= 0 ? 1 : -1;
-	int obmen = 0;
-	if (delta_y > delta_x)
-	{
-		int temp = delta_x;
-		delta_x = delta_y;
-		delta_y = temp;
-		obmen = 1;
-	}
-	else
-		obmen = 0;
-	int error_val = 2 * delta_y - delta_x;
-	for (int i = 1; i <= delta_x; i++)
-	{
-		im->FillRectangle(gcnew SolidBrush(current_color->BackColor), x, y, 1, 1);
-		while (error_val >= 0)
-		{
-			obmen == 1 ? x = x + s1 : y = y + s2;
-			error_val = error_val - 2 * delta_x;
-		}
-		obmen == 1 ? y = y + s2 : x = x + s1;
-		error_val = error_val + 2 * delta_y;
-	}
-}
-
-/*
-bresenham circle algo
-*/
-System::Void sem1::MyForm::bres_circle()
-{
-	rad_second = rad_first;
-	bres_ellipse();
-}
-
-/*
-ellipse algo
-*/
-System::Void sem1::MyForm::bres_ellipse()
-{
-	int x = 0;
-	int y = rad_second;
-	int sigma = 0;
-	int a = rad_first;
-	int b = rad_second;
-	//b^2(0+1)^2-a^2*(y-1)^2-a^2b^2 = b^2-a^2*(b-1)^2-a^2b^2 = b^2-a^2*(b-1)-a^2(2b - 1)
-	int delta = pow(b, 2) - pow(a, 2) * (2 * b - 1);
-	int predel = 0;
-	do
-	{
-		draw_pixels(x, y);//draw 4 pixels on the canvas having only one coordinate
-		if (y <= predel)
-			return;
-		if (delta < 0)
-		{
-			sigma = (int)(2 * delta + pow(a, 2) * (2 * y - 1));//choose between diagonal and horizontal
-			if (sigma <= 0)
-			{
-				x = x + 1;
-				delta = (int)(delta + pow(b, 2)*(2 * x + 1));//horizontal
-			}
-			else {
-				x = x + 1;
-				y = y - 1;
-				delta = (int)(delta + pow(b, 2)*(2 * x + 1) - pow(a, 2)*(2 * y - 1));//diagonal
-			}
-		}
-		else if (delta > 0)
-		{
-			sigma = (int)(2 * delta - pow(b, 2) * (2 * x - 1));;//choose between diagonal and vertical
-			if (sigma <= 0)
-			{
-				x = x + 1;
-				y = y - 1;
-				delta = (int)(delta + pow(b, 2)*(2 * x + 1) - pow(a, 2)*(2 * y - 1));//diagonal
-			}
-			else {
-				y = y - 1;
-				delta = (int)(delta - pow(a, 2)*(2 * y - 1));//vertical
-			}
-		}
-		else {
-			x = x + 1;
-			y = y - 1;
-			delta = (int)(delta + pow(b, 2)*(2 * x + 1) - pow(a, 2)*(2 * y - 1));//diagonal
-		}
-	} while (true);
-}
-
-#pragma endregion Bresenham algo
-
-#pragma region Zalivka
-
-System::Void sem1::MyForm::row_by_row_zalivka(stack<pair<int, int>> pixel, int ex, int ey, SolidBrush^ fill_color)
-{
-	Bitmap^ b = gcnew Bitmap(canvas->Width, canvas->Height);
-	canvas->DrawToBitmap(b, canvas->ClientRectangle);
-	pair<int, int> current;
-	Color^ selected_pixel_color = b->GetPixel(ex, ey);
-	Color^ current_pixel_colour;
-	while (!pixel.empty()) {
-		current = pixel.top();
-		pixel.pop();
-		int cur_x = current.first;
-		int cur_y = current.second;
-		int start_x = cur_x;//remember the start point		
-		current_pixel_colour = b->GetPixel(cur_x, cur_y);
-		//go to the right
-		while (current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color)) {
-			im->FillRectangle(gcnew SolidBrush(current_color->BackColor), cur_x, cur_y, 1, 1);
-			cur_x = cur_x + 1;
-			current_pixel_colour = b->GetPixel(cur_x, cur_y);
-		}
-		//save the most right pixel
-		int xright = cur_x - 1;
-		//go to the left from start point
-		cur_x = start_x - 1;
-		while (current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color)) {
-			im->FillRectangle(gcnew SolidBrush(current_color->BackColor), cur_x, cur_y, 1, 1);
-			cur_x = cur_x - 1;
-			current_pixel_colour = b->GetPixel(cur_x, cur_y);
-		}
-		//save the most left pixel
-		int xleft = cur_x + 1;
-		cur_y = cur_y - 1;//go down
-		int flag = 1;
-		for (cur_x = xleft; cur_x <= xright; cur_x++)
-		{
-			current_pixel_colour = b->GetPixel(cur_x, cur_y + 1);
-			if (current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color))
-			{
-				if (flag == 1)
-				{
-					pixel.push(make_pair(cur_x, cur_y + 1));
-					flag = 0;
-				}
-			}
-			else
-				flag = 1;
-		}
-		//go up
-		flag = 1;
-		for (cur_x = xleft; cur_x <= xright; cur_x++)
-		{
-			current_pixel_colour = b->GetPixel(cur_x, cur_y - 1);
-			if (current_pixel_colour->Equals(selected_pixel_color) && !current_pixel_colour->Equals(fill_color->Color))
-			{
-				if (flag == 1)
-				{
-					pixel.push(make_pair(cur_x, cur_y - 1));
-					flag = 0;
-				}
-			}
-			else
-				flag = 1;
-		}
-	}
-}
-
-System::Void sem1::MyForm::xor_zalivka(int ex, int ey)
-{
-	/*int ymax, xmax;
-	bool flag = false;
-	for (int y = 0; y < ymax; y++)
-	{
-			flag = false;
-			for (int x = 0; x < xmax; x++)
-			{
-				if (i[x, y] == 1)
-				{
-					flag = !flag;
-				}
-				if (flag)
-					i[x, y] = 1;
-			}
-	}*/
-}
-
-
-#pragma endregion Zalivka
-
-#pragma region Cut
-
-System::Void sem1::MyForm::window(int ex, int ey)
-{
-	if (x1_cut == -1)
-	{
-		x1_cut = ex;
-		y1_cut = ey;
-	}
-	else {
-		if (ex < x1_cut) {
-			x2_cut = x1_cut;
-			x1_cut = ex;
-		}
-		else
-			x2_cut = ex;
-		if (ey < y1_cut) {
-			y2_cut = y1_cut;
-			y1_cut = ey;
-		}
-		else
-			y2_cut = ey;
-		System::Drawing::Rectangle rect = System::Drawing::Rectangle(x1_cut, y1_cut, abs(x2_cut - x1_cut), abs(y2_cut - y1_cut));
-		im->DrawRectangle(gcnew Pen(current_color->BackColor), rect);
-		process_lines_cut(x1_cut, y1_cut, x2_cut, y2_cut);
-		x1_cut = -1;
-		y1_cut = -1;
-	}
-}
-
-System::Void sem1::MyForm::process_lines_cut(int x1_cut, int y1_cut, int x2_cut, int y2_cut)
-{
-	int i = lines_vector->size() - 1;
-	while (!lines_vector->empty())
-	{
-		pair<pair<int*, int*>, pair<int*, int*>> p_sum = lines_vector->at(i);
-		lines_vector->pop_back();
-		int g1 = (int)p_sum.first.first;
-		int g2 = (int)p_sum.first.second;
-		int g3 = (int)p_sum.second.first;
-		int g4 = (int)p_sum.second.second;
-		//todo analise how to color the lines
-		i--;
-	}
-}
-
-#pragma endregion Cut
 
 #pragma region Form events
 
@@ -296,12 +52,10 @@ void split(const string& s, char c,
 	vector<string>& v) {
 	string::size_type i = 0;
 	string::size_type j = s.find(c);
-
 	while (j != string::npos) {
 		v.push_back(s.substr(i, j - i));
 		i = ++j;
 		j = s.find(c, j);
-
 		if (j == string::npos)
 			v.push_back(s.substr(i, s.length()));
 	}
@@ -321,7 +75,7 @@ System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System:
 		{
 			while (getline(myfile, line))
 			{
-				int index = line.find_first_of(" ");
+				auto index = line.find_first_of(" ");
 				string figure_name = line.substr(0, index);
 				vector<string> v;
 				split(line, ' ', v);
@@ -426,7 +180,7 @@ System::Void sem1::MyForm::xor_fill_CheckedChanged(System::Object ^ sender, Syst
 }
 
 System::Void sem1::MyForm::existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
-	existed_method = !existed_method;//do we use existed methods or the bresenham algo
+	existed_method = !existed_method;
 }
 
 #pragma endregion Check Changed
@@ -437,38 +191,24 @@ System::Void sem1::MyForm::existedMethodChecker_CheckedChanged(System::Object^  
 
 System::Void sem1::MyForm::draw_line_by_line(int ex, int ey)
 {
-	ex = 10;
-	ey = 10;
-	/*Bitmap^ bm = gcnew Bitmap(canvas->Width, canvas->Height);*/
-	Color^ co = bm->GetPixel(ex, ey);
-	int f = 4;
-	/*stack<pair<int, int>> pixel;
+	stack<pair<int, int>> pixel;
 	pixel.push(make_pair(ex, ey));
-	Pen^p = gcnew Pen(colorDialog1->Color);
-	Brush^ v = gcnew SolidBrush(p->Color);
-	im->FillRectangle(v, 0, 0, 1, 1);
-	im->FillRectangle(greenBrush, 10, 10, 1, 1);
-	Bitmap^ bb = gcnew Bitmap(canvas->Image);	
-	//bb = gcnew Bitmap(canvas->InitialImage);
-	Color^ w = bb->GetPixel(0, 0);
-	Color^ w1 = bb->GetPixel(10, 10);
-	im->FillRectangle(greenBrush, 1, 1, 1, 1);
-	w1 = bb->GetPixel(1, 1);
-	row_by_row_zalivka(pixel, ex, ey, greenBrush);*/
+	Fill::row_by_row_fill(pixel, ex, ey, gcnew SolidBrush(color_chooser->BackColor), bm, im, canvas, current_color);
 }
 
 System::Void sem1::MyForm::draw_xor(int ex, int ey)
 {
-	xor_zalivka(ex, ey);
+	Fill::xor_fill(ex, ey);
 }
 
 System::Void sem1::MyForm::draw_window(int ex, int ey)
 {
-	window(ex, ey);
+	Cut::window(ex, ey,x1_cut, x2_cut, y1_cut, y2_cut, im, gcnew Pen(current_color->BackColor), lines_vector);
 }
 
 System::Void sem1::MyForm::draw_objects(int ex, int ey)
 {
+	Brush^b = gcnew SolidBrush(current_color->BackColor);
 	switch (objects->SelectedIndex)
 	{
 	case 0://line
@@ -476,8 +216,8 @@ System::Void sem1::MyForm::draw_objects(int ex, int ey)
 		if (x1 != -1 && y1 != -1)
 		{
 			x2 = ex;
-			y2 = ey;
-			existed_method == false ? bres_line() : im->DrawLine(gcnew Pen(current_color->BackColor), x1, y1, x2, y2);
+			y2 = ey; 			
+			!existed_method ? Bresenhem::bres_line(x1, y1, x2, y2, im, b) : im->DrawLine(gcnew Pen(current_color->BackColor), x1, y1, x2, y2);
 			pair<int*, int*> p1 = make_pair((int*)x1, (int*)y1);
 			pair<int*, int*> p2 = make_pair((int*)x2, (int*)y2);
 			pair<pair<int*, int*>, pair<int*, int*>> p_sum = make_pair(p1, p2);
@@ -498,7 +238,7 @@ System::Void sem1::MyForm::draw_objects(int ex, int ey)
 			int cur_x = ex;
 			int cur_y = ey;
 			rad_first = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
-			existed_method == false ? bres_circle() : im->DrawEllipse(gcnew Pen(current_color->BackColor), x1 - rad_first, y1 - rad_first, rad_first * 2, rad_first * 2);
+			!existed_method ? Bresenhem::bres_circle(x1, y1, rad_first, im, b) : im->DrawEllipse(gcnew Pen(current_color->BackColor), x1 - rad_first, y1 - rad_first, rad_first * 2, rad_first * 2);
 			x1 = -1;
 			y1 = -1;
 			rad_first = -1;
@@ -518,7 +258,7 @@ System::Void sem1::MyForm::draw_objects(int ex, int ey)
 			if (rad_first != -1)
 			{
 				rad_second = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
-				existed_method == false ? bres_ellipse() : im->DrawEllipse(gcnew Pen(current_color->BackColor), x1 - rad_first, y1 - rad_first, rad_first * 2, rad_second * 2);
+				!existed_method ? Bresenhem::bres_ellipse(x1, y1, rad_first, rad_second, im, b) :im->DrawEllipse(gcnew Pen(current_color->BackColor), x1 - rad_first, y1 - rad_first, rad_first * 2, rad_second * 2);
 				x1 = -1;
 				y1 = -1;
 				rad_first = -1;
@@ -549,14 +289,7 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 	canvas->Refresh();
 }
 
-System::Void sem1::MyForm::draw_pixels(int x, int y)
-{
-	Brush^b = gcnew SolidBrush(current_color->BackColor);
-	im->FillRectangle(b, x + x1, y + y1, 1, 1);
-	im->FillRectangle(b, x1 - x, y + y1, 1, 1);
-	im->FillRectangle(b, x + x1, y1 - y, 1, 1);
-	im->FillRectangle(b, x1 - x, y1 - y, 1, 1);
-}
+
 
 System::Void sem1::MyForm::cleanCanvas()
 {
