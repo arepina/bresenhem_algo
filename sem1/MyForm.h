@@ -14,12 +14,14 @@
 #include <iostream>
 #include <msclr/marshal_cppstd.h>
 #include <stack> 
+#include <iterator>
 
 using namespace std;
 
 #include "Bresenhem.h"
 #include "Fill.h"
 #include "Cut.h"
+#include "Figure.h"
 
 namespace sem1 {
 
@@ -29,6 +31,7 @@ namespace sem1 {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Collections::Generic;
 
 
 	/// <summary>
@@ -45,21 +48,10 @@ namespace sem1 {
 			im = Graphics::FromImage(bm);
 			current_color->BackColor = Color::Blue;
 			objects->SelectedIndex = 0;
-			x1 = -1;
-			y1 = -1;
-			x2 = -1;
-			y2 = -1;
-			rad_first = -1;
-			rad_second = -1;
-			x1_cut = -1;
-			y1_cut = -1;
-			x2_cut = -1;
-			y2_cut = -1;
 			existed_method = false;
 			is_line_by_line = true;
 			is_xor = false;
 			is_window_mode = false;
-			lines_vector = new vector<pair<pair<int*, int*>, pair<int*, int*>>>;
 		}
 
 	protected:
@@ -74,10 +66,11 @@ namespace sem1 {
 			}
 		}
 
-	public: static Bitmap ^bm;
-			static Graphics ^im;
-			vector<pair<pair<int*, int*>, pair<int*, int*>>>* lines_vector;
-			int x1, y1, x2, y2, rad_first, rad_second, x1_cut, y1_cut, x2_cut, y2_cut;
+	public: 
+			List<Point>^ dots = gcnew List<Point>();
+			List<Figure^>^ figures = gcnew List<Figure^>();
+			static Bitmap ^bm;
+			static Graphics ^im;				
 			bool existed_method, is_line_by_line, is_xor, is_window_mode;
 	private: System::Windows::Forms::PictureBox^  canvas;
 			 System::Windows::Forms::MenuStrip^  menuStrip1;
@@ -101,6 +94,7 @@ namespace sem1 {
 			 System::Windows::Forms::Button^  color_chooser;
 			 System::Windows::Forms::PictureBox^  current_color;
 			 System::Windows::Forms::Label^  label2;
+	private: System::Windows::Forms::Button^  save_to_file;
 
 	protected:
 
@@ -139,6 +133,7 @@ namespace sem1 {
 			this->color_chooser = (gcnew System::Windows::Forms::Button());
 			this->current_color = (gcnew System::Windows::Forms::PictureBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->save_to_file = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->canvas))->BeginInit();
 			this->menuStrip1->SuspendLayout();
 			this->fill_groupbox->SuspendLayout();
@@ -287,13 +282,14 @@ namespace sem1 {
 			// 
 			// draw_groupbox
 			// 
+			this->draw_groupbox->Controls->Add(this->save_to_file);
 			this->draw_groupbox->Controls->Add(this->objects);
 			this->draw_groupbox->Controls->Add(this->existedMethodChecker);
 			this->draw_groupbox->Controls->Add(this->draw_from_file);
 			this->draw_groupbox->Controls->Add(this->random_generate);
 			this->draw_groupbox->Location = System::Drawing::Point(12, 27);
 			this->draw_groupbox->Name = L"draw_groupbox";
-			this->draw_groupbox->Size = System::Drawing::Size(151, 132);
+			this->draw_groupbox->Size = System::Drawing::Size(151, 156);
 			this->draw_groupbox->TabIndex = 34;
 			this->draw_groupbox->TabStop = false;
 			this->draw_groupbox->Text = L"Рисование";
@@ -359,6 +355,16 @@ namespace sem1 {
 			this->label2->TabIndex = 38;
 			this->label2->Text = L"Текущий цвет";
 			// 
+			// save_to_file
+			// 
+			this->save_to_file->Location = System::Drawing::Point(6, 131);
+			this->save_to_file->Name = L"save_to_file";
+			this->save_to_file->Size = System::Drawing::Size(138, 23);
+			this->save_to_file->TabIndex = 32;
+			this->save_to_file->Text = L"Сохранить в файл";
+			this->save_to_file->UseVisualStyleBackColor = true;
+			this->save_to_file->Click += gcnew System::EventHandler(this, &MyForm::save_to_file_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -413,5 +419,6 @@ namespace sem1 {
 	private: System::Void load_lines_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void window_mode_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void color_chooser_Click(System::Object^  sender, System::EventArgs^  e);
-	};
+	private: System::Void save_to_file_Click(System::Object^  sender, System::EventArgs^  e);
+};
 }

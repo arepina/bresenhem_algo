@@ -18,17 +18,8 @@ Class sem1.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
-    std.vector<std::pair<std::pair<int \*\,int \*>\,std::pair<int \*\,int \*> >\,std::allocator<std::pair<std::pair<int \*\,int \*>\,std::pair<int \*\,int \*> > > >* lines_vector : Public
-    Int32 x1 : Public
-    Int32 y1 : Public
-    Int32 x2 : Public
-    Int32 y2 : Public
-    Int32 rad_first : Public
-    Int32 rad_second : Public
-    Int32 x1_cut : Public
-    Int32 y1_cut : Public
-    Int32 x2_cut : Public
-    Int32 y2_cut : Public
+    System.Collections.Generic.List`1[System.Drawing.Point] dots : Public
+    System.Collections.Generic.List`1[sem1.Figure] figures : Public
     Boolean existed_method : Public
     Boolean is_line_by_line : Public
     Boolean is_xor : Public

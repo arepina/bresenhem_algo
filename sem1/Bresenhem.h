@@ -3,6 +3,7 @@
 using std::pair;
 using std::vector;
 using namespace System::Drawing;
+#include "Figure.h"
 
 namespace sem1 {
 
@@ -10,9 +11,9 @@ namespace sem1 {
 	{
 
 	public:
-		static void bres_line(int x1, int y1, int x2, int y2, Graphics^ im, Brush^ b);//bresenham line algo
-		static void bres_circle(int x1, int y1, int rad_first, Graphics^ im, Brush^ b);//bresenham circle algo
-		static void bres_ellipse(int x1, int y1, int rad_first, int rad_second, Graphics^ im, Brush^ b);//ellipse algo
+		static void bres_line(Figure^ f, Graphics^ im, Brush^ b);//bresenham line algo
+		static void bres_circle(Figure^ f, Graphics^ im, Brush^ b);//bresenham circle algo
+		static void bres_ellipse(Figure^ f, Graphics^ im, Brush^ b);//ellipse algo
 		static void draw_pixels(int x, int y, int x1, int y1, Graphics^ im, Brush^ b);//place pixels on canvas
 	};
 }

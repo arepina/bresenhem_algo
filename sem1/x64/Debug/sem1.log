@@ -1,6 +1,6 @@
 ﻿  MyForm.cpp
-MyForm.cpp(221): warning C4312: 'type cast': conversion from 'int' to 'int *' of greater size
-MyForm.cpp(222): warning C4312: 'type cast': conversion from 'int' to 'int *' of greater size
+d:\bresenhem_algo\sem1\MyForm.h(71): warning C4677: 'figures': signature of non-private member contains assembly private type 'sem1::Figure'
+  d:\bresenhem_algo\sem1\Figure.h(10): note: see declaration of 'sem1::Figure'
   Bresenhem.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
   sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.exe
   sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.pdb (Partial PDB)

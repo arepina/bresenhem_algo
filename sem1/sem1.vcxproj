@@ -133,12 +133,14 @@
   <ItemGroup>
     <ClCompile Include="Bresenhem.cpp" />
     <ClCompile Include="Cut.cpp" />
+    <ClCompile Include="Figure.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="Fill.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bresenhem.h" />
     <ClInclude Include="Cut.h" />
+    <ClInclude Include="Figure.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>

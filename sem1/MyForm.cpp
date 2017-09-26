@@ -9,6 +9,7 @@
 
 using namespace sem1;
 using namespace std;
+
 [STAThread]
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -98,12 +99,31 @@ System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System:
 					what_to_draw(stoi(v.at(3)), stoi(v.at(4)));
 					what_to_draw(stoi(v.at(5)), stoi(v.at(6)));
 				}
-
 			}
 			myfile.close();
 		}
 
 	}
+}
+
+System::Void sem1::MyForm::save_to_file_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	ofstream myfile("..//figures.txt");
+	for (int i = 0; i < figures->Count; i++)
+	{
+		Figure^ f = figures[i];
+		String^ s;
+		switch (f->getFigureType())
+		{
+		case FigureType::Line: s = "line " + f->x1 + " " + f->y1 + " " + f->x2 + " " + f->y2; break;
+		case FigureType::Circle: s += "circle " + f->x1 + " " + f->y1 + " " + f->rad_first; break;
+		case FigureType::Ellipse: s += "ellipse " + f->x1 + " " + f->y1 + " " + f->rad_first + " " + f->rad_second; break;
+		}
+		std::string unmanaged = msclr::interop::marshal_as<std::string>(s);
+		myfile << unmanaged << "\n";
+	}
+	myfile.close();
+	MessageBox::Show("Файл сохранен, он называется figures.txt");
 }
 
 System::Void sem1::MyForm::load_lines_Click(System::Object ^ sender, System::EventArgs ^ e)
@@ -137,6 +157,7 @@ System::Void sem1::MyForm::createObjectToolStripMenuItem_Click(System::Object ^ 
 	draw_groupbox->Visible = true;
 	fill_groupbox->Visible = false;
 	cut_groupbox->Visible = false;
+	dots->Clear();
 }
 
 System::Void sem1::MyForm::cutToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
@@ -145,6 +166,7 @@ System::Void sem1::MyForm::cutToolStripMenuItem_Click(System::Object ^ sender, S
 	draw_groupbox->Visible = false;
 	fill_groupbox->Visible = false;
 	cut_groupbox->Visible = true;
+	dots->Clear();
 }
 
 System::Void sem1::MyForm::fillToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
@@ -152,6 +174,7 @@ System::Void sem1::MyForm::fillToolStripMenuItem_Click(System::Object ^ sender, 
 	draw_groupbox->Visible = false;
 	fill_groupbox->Visible = true;
 	cut_groupbox->Visible = false;
+	dots->Clear();
 }
 
 #pragma endregion Menu
@@ -166,7 +189,7 @@ System::Void sem1::MyForm::color_chooser_Click(System::Object ^ sender, System::
 {
 	colorDialog1->ShowDialog();
 	current_color->BackColor = colorDialog1->Color;
-	
+
 }
 
 System::Void sem1::MyForm::line_by_line_fill_CheckedChanged(System::Object ^ sender, System::EventArgs ^ e)
@@ -203,73 +226,82 @@ System::Void sem1::MyForm::draw_xor(int ex, int ey)
 
 System::Void sem1::MyForm::draw_window(int ex, int ey)
 {
-	Cut::window(ex, ey,x1_cut, x2_cut, y1_cut, y2_cut, im, gcnew Pen(current_color->BackColor), lines_vector);
+	Point current;
+	current.X = ex;
+	current.Y = ey;
+	if (dots->Count == 1)
+	{
+		Point^ first = dots[0];
+		Figure^ f = gcnew Figure();
+		f->create_rect(first->X, first->Y, current.X, current.Y);
+		figures->Add(f);
+		System::Drawing::Rectangle rect;
+		if (first->X < current.X)
+			first->Y < current.Y ?
+			rect = System::Drawing::Rectangle(first->X, first->Y, abs(current.X - first->X), abs(current.Y - first->Y)) : rect = System::Drawing::Rectangle(first->X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
+		else
+			first->Y < current.Y ?
+			rect = System::Drawing::Rectangle(current.X, first->Y, abs(current.X - first->X), abs(current.Y - first->Y)) : rect = System::Drawing::Rectangle(current.X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
+		im->DrawRectangle(gcnew Pen(current_color->BackColor), rect);
+		dots->Clear();
+	}
+	else
+		dots->Add(current);
 }
 
 System::Void sem1::MyForm::draw_objects(int ex, int ey)
 {
 	Brush^b = gcnew SolidBrush(current_color->BackColor);
+	Point current;
+	current.X = ex;
+	current.Y = ey;
 	switch (objects->SelectedIndex)
 	{
 	case 0://line
 	{
-		if (x1 != -1 && y1 != -1)
-		{
-			x2 = ex;
-			y2 = ey; 			
-			!existed_method ? Bresenhem::bres_line(x1, y1, x2, y2, im, b) : im->DrawLine(gcnew Pen(current_color->BackColor), x1, y1, x2, y2);
-			pair<int*, int*> p1 = make_pair((int*)x1, (int*)y1);
-			pair<int*, int*> p2 = make_pair((int*)x2, (int*)y2);
-			pair<pair<int*, int*>, pair<int*, int*>> p_sum = make_pair(p1, p2);
-			lines_vector->push_back(p_sum);			
-			x1 = -1;
-			y1 = -1;
+		if (dots->Count == 1) {
+			Point^ first = dots[0];
+			Figure^ f = gcnew Figure();
+			f->create_line(first->X, first->Y, current.X, current.Y);
+			figures->Add(f);
+			!existed_method ? Bresenhem::bres_line(f, im, b) : im->DrawLine(gcnew Pen(current_color->BackColor), f->x1, f->y1, f->x2, f->y2);
+			dots->Clear();
 		}
-		else {
-			x1 = ex;
-			y1 = ey;
-		}
+		else
+			dots->Add(current);
 		break;
 	}
 	case 1://circle
 	{
-		if (x1 != -1 && y1 != -1)
-		{
-			int cur_x = ex;
-			int cur_y = ey;
-			rad_first = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
-			!existed_method ? Bresenhem::bres_circle(x1, y1, rad_first, im, b) : im->DrawEllipse(gcnew Pen(current_color->BackColor), x1 - rad_first, y1 - rad_first, rad_first * 2, rad_first * 2);
-			x1 = -1;
-			y1 = -1;
-			rad_first = -1;
+		if (dots->Count == 1) {
+			Point^ center = dots[0];
+			Figure^ f = gcnew Figure();
+			int radius = (int)sqrt(pow((abs(current.X - center->X)), 2) + pow((abs(current.Y - center->Y)), 2));
+			f->create_circle(center->X, center->Y, radius);
+			figures->Add(f);
+			!existed_method ? Bresenhem::bres_circle(f, im, b) : im->DrawEllipse(gcnew Pen(current_color->BackColor), center->X - radius, center->Y - radius, radius * 2, radius * 2);
+			dots->Clear();
 		}
-		else {
-			x1 = ex;
-			y1 = ey;
-		}
+		else
+			dots->Add(current);
 		break;
 	}
 	case 2://ellipse
 	{
-		if (x1 != -1 && y1 != -1)
+		if (dots->Count == 2)
 		{
-			int cur_x = ex;
-			int cur_y = ey;
-			if (rad_first != -1)
-			{
-				rad_second = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
-				!existed_method ? Bresenhem::bres_ellipse(x1, y1, rad_first, rad_second, im, b) :im->DrawEllipse(gcnew Pen(current_color->BackColor), x1 - rad_first, y1 - rad_first, rad_first * 2, rad_second * 2);
-				x1 = -1;
-				y1 = -1;
-				rad_first = -1;
-			}
-			else
-				rad_first = (int)sqrt(pow((abs(cur_x - x1)), 2) + pow((abs(cur_y - y1)), 2));
+			Point^ center = dots[0];
+			Point^ width_click = dots[1];
+			Figure^ f = gcnew Figure();
+			int rad_first = (int)sqrt(pow((abs(width_click->X - center->X)), 2) + pow((abs(width_click->Y - center->Y)), 2));
+			int rad_second = (int)sqrt(pow((abs(current.X - center->X)), 2) + pow((abs(current.Y - center->Y)), 2));
+			f->create_ellipse(center->X, center->Y, rad_first, rad_second);
+			figures->Add(f);
+			!existed_method ? Bresenhem::bres_ellipse(f, im, b) : im->DrawEllipse(gcnew Pen(current_color->BackColor), center->X - rad_first, center->Y - rad_first, rad_first * 2, rad_second * 2);
+			dots->Clear();
 		}
-		else {
-			x1 = ex;
-			y1 = ey;
-		}
+		else
+			dots->Add(current);
 		break;
 	}
 	}
@@ -280,7 +312,7 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 	if (draw_groupbox->Visible || cut_groupbox->Visible)
 		if (is_window_mode)
 			draw_window(ex, ey);
-		else 
+		else
 			draw_objects(ex, ey);
 	else if (is_line_by_line)
 		draw_line_by_line(ex, ey);
@@ -290,11 +322,11 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 }
 
 
-
 System::Void sem1::MyForm::cleanCanvas()
 {
 	im->Clear(Color::White);
-	lines_vector->clear();
+	dots->Clear();
+	figures->Clear();
 	canvas->Refresh();
 }
 #pragma endregion Drawing

@@ -2,14 +2,14 @@
 using namespace sem1;
 using namespace std;
 
-System::Void sem1::Bresenhem::bres_line(int x1, int y1, int x2, int y2, Graphics^ im, Brush^brush)
+System::Void sem1::Bresenhem::bres_line(Figure^ f, Graphics^ im, Brush^brush)
 {
-	int x = x1;
-	int y = y1;
-	int delta_x = abs(x2 - x1);
-	int delta_y = abs(y2 - y1);
-	int s1 = x2 - x1 >= 0 ? 1 : -1;
-	int s2 = y2 - y1 >= 0 ? 1 : -1;
+	int x = f->x1;
+	int y = f->y1;
+	int delta_x = abs(f->x2 - f->x1);
+	int delta_y = abs(f->y2 - f->y1);
+	int s1 = f->x2 - f->x1 >= 0 ? 1 : -1;
+	int s2 = f->y2 - f->y1 >= 0 ? 1 : -1;
 	int obmen = 0;
 	if (delta_y > delta_x)
 	{
@@ -34,25 +34,24 @@ System::Void sem1::Bresenhem::bres_line(int x1, int y1, int x2, int y2, Graphics
 	}
 }
 
-System::Void sem1::Bresenhem::bres_circle(int x1, int y1, int rad_first, Graphics^ im, Brush^brush)
+System::Void sem1::Bresenhem::bres_circle(Figure^ f, Graphics^ im, Brush^brush)
 {
-	int rad_second = rad_first;
-	bres_ellipse(x1, y1, rad_first, rad_second, im, brush);
+	bres_ellipse(f, im, brush);
 }
 
-System::Void sem1::Bresenhem::bres_ellipse(int x1, int y1, int rad_first, int rad_second, Graphics^ im, Brush^brush)
+System::Void sem1::Bresenhem::bres_ellipse(Figure^ f, Graphics^ im, Brush^brush)
 {
 	int x = 0;
-	int y = rad_second;
+	int y = f->rad_second;
 	int sigma = 0;
-	int a = rad_first;
-	int b = rad_second;
+	int a = f->rad_first;
+	int b = f->rad_second;
 	//b^2(0+1)^2-a^2*(y-1)^2-a^2b^2 = b^2-a^2*(b-1)^2-a^2b^2 = b^2-a^2*(b-1)-a^2(2b - 1)
 	int delta = b*b - a*a * (2 * b - 1);
 	int predel = 0;
 	do
 	{
-		draw_pixels(x, y, x1, y1, im, brush);//draw 4 pixels on the canvas having only one coordinate
+		draw_pixels(x, y, f->x1, f->y1, im, brush);//draw 4 pixels on the canvas having only one coordinate
 		if (y <= predel)
 			return;
 		if (delta < 0)
