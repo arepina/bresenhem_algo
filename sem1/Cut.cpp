@@ -1,3 +1,4 @@
+//All the info is in the about
 #include "Cut.h"
 using namespace sem1;
 using namespace std;

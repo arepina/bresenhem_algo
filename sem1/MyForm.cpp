@@ -1,10 +1,4 @@
-//Программа выполнена студенткой группы БПИ143(1) Репиной Анастасией Андреевной. 
-//Среда разработки: Visual Studio 2015 Entherprise, ОС Windows 10
-//Дата 07.09.2017
-//Выполнены пункты:
-//1)bresenham line algo
-//2)bresenham circle algo
-//3)ellipse algo
+//All the info is in the about
 #include "MyForm.h"
 
 using namespace sem1;
@@ -64,6 +58,7 @@ void split(const string& s, char c,
 
 System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	Brush^b = gcnew SolidBrush(current_color->BackColor);
 	OpenFileDialog ^fd = gcnew OpenFileDialog;
 	fd->Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
 	if (fd->ShowDialog() == System::Windows::Forms::DialogResult::OK)
@@ -83,27 +78,32 @@ System::Void sem1::MyForm::draw_from_file_Click(System::Object ^ sender, System:
 				if (v.at(0) == "line")
 				{
 					objects->SelectedIndex = 0;
-					what_to_draw(stoi(v.at(1)), stoi(v.at(2)));
-					what_to_draw(stoi(v.at(3)), stoi(v.at(4)));
+					Figure^ f = gcnew Figure();
+					f->create_line(stoi(v.at(1)), stoi(v.at(2)), stoi(v.at(3)), stoi(v.at(4)));
+					figures->Add(f);
+					Bresenhem::bres_line(f, im, b);
 				}
 				if (v.at(0) == "circle")
 				{
 					objects->SelectedIndex = 1;
-					what_to_draw(stoi(v.at(1)), stoi(v.at(2)));
-					what_to_draw(stoi(v.at(3)), stoi(v.at(4)));
+					Figure^ f = gcnew Figure();
+					f->create_circle(stoi(v.at(1)), stoi(v.at(2)), stoi(v.at(3)));
+					figures->Add(f);
+					Bresenhem::bres_circle(f, im, b);
 				}
 				if (v.at(0) == "ellipse")
 				{
 					objects->SelectedIndex = 2;
-					what_to_draw(stoi(v.at(1)), stoi(v.at(2)));
-					what_to_draw(stoi(v.at(3)), stoi(v.at(4)));
-					what_to_draw(stoi(v.at(5)), stoi(v.at(6)));
+					Figure^ f = gcnew Figure();
+					f->create_ellipse(stoi(v.at(1)), stoi(v.at(2)), stoi(v.at(3)), stoi(v.at(4)));
+					figures->Add(f);
+					Bresenhem::bres_ellipse(f, im, b);
 				}
 			}
 			myfile.close();
 		}
-
 	}
+	canvas->Refresh();
 }
 
 System::Void sem1::MyForm::save_to_file_Click(System::Object ^ sender, System::EventArgs ^ e)
@@ -149,7 +149,15 @@ System::Void sem1::MyForm::canvas_MouseClick(System::Object^  sender, System::Wi
 
 #pragma region Menu
 System::Void sem1::MyForm::aboutProgramToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
-	MessageBox::Show("Программа выполнена студенткой группы БПИ143(1) \nРепиной Анастасией Андреевной \nСреда разработки: Visual Studio 2015 Entherprise \nОС Windows 10 \nДата 07.09.2017 \nВыполнены пункты: \n1)bresenham line algo\n2)bresenham circle algo\n3)ellipse algo", "О программе");
+	MessageBox::Show("Программа выполнена студенткой группы БПИ143(1)\n" + 
+		"Репиной Анастасией Андреевной\n" +
+		"Среда разработки: Visual Studio 2015 Entherprise \n" +
+		"ОС Windows 10\n" +
+		"Дата 07.09.2017\n" + 
+		"Выполнены пункты:\n" +
+		"1)bresenham line, circle ellipse algos\n" + 
+		"2)fill line by line, xor fill, window cut\n\n" +
+		"Для удоства выполнения различных функций используются вкладки меню. Чтобы создать один из трех объектов: линия, круг, эллипс требуется выбрать тип объекта, вариант отрисовки, а также желаемый цвет на 1 вкладке. Далее достаточно просто нажатием мыши задавать координаты фигур. Для заливки требуется выбрать вкладку номер 2, где, выбрав цвет заливки, можно выполнить зиливку фигуры также жатием кнопки мыши на стартовый пиксель(тот, от которого идет заливка). С помощью 3 вкладки можно выполнить отсечение. На данной вкладке доступны для рисования лишь отрезки, чтобы отсечь которые требуется перейти в режим окна и нарисовать таковое двумя кликами мыши. Кроме того для вышеописанных действий имеется возможность загрузки/сохранения данных в файл.", "О программе");
 }
 
 System::Void sem1::MyForm::createObjectToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
@@ -321,6 +329,19 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 	canvas->Refresh();
 }
 
+sem1::MyForm::MyForm(void)
+{
+	InitializeComponent();
+	bm = gcnew Bitmap(canvas->Width, canvas->Height);
+	canvas->Image = bm;
+	im = Graphics::FromImage(bm);
+	current_color->BackColor = Color::Black;
+	objects->SelectedIndex = 0;
+	existed_method = false;
+	is_line_by_line = true;
+	is_xor = false;
+	is_window_mode = false;
+}
 
 System::Void sem1::MyForm::cleanCanvas()
 {

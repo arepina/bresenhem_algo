@@ -1,10 +1,4 @@
-//Программа выполнена студенткой группы БПИ143(1) Репиной Анастасией Андреевной. 
-//Среда разработки: Visual Studio 2015 Entherprise, ОС Windows 10
-//Дата 07.09.2017
-//Выполнены пункты:
-//1)bresenham line algo
-//2)bresenham circle algo
-//3)ellipse algo
+//All the info is in the about
 #pragma once
 #include <cmath>
 #include <ctime>
@@ -40,19 +34,7 @@ namespace sem1 {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
-		MyForm(void)
-		{
-			InitializeComponent();
-			bm = gcnew Bitmap(canvas->Width, canvas->Height);
-			canvas->Image = bm;
-			im = Graphics::FromImage(bm);
-			current_color->BackColor = Color::Blue;
-			objects->SelectedIndex = 0;
-			existed_method = false;
-			is_line_by_line = true;
-			is_xor = false;
-			is_window_mode = false;
-		}
+		MyForm(void);
 
 	protected:
 		/// <summary>

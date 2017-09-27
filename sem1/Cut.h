@@ -1,3 +1,4 @@
+//All the info is in the about
 #pragma once
 #include <vector>
 using std::pair;

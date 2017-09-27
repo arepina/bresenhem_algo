@@ -1,6 +1,19 @@
-﻿  MyForm.cpp
-d:\bresenhem_algo\sem1\MyForm.h(71): warning C4677: 'figures': signature of non-private member contains assembly private type 'sem1::Figure'
-  d:\bresenhem_algo\sem1\Figure.h(10): note: see declaration of 'sem1::Figure'
+﻿  Bresenhem.cpp
+  Cut.cpp
+Cut.cpp(13): warning C4311: 'type cast': pointer truncation from 'int *' to 'int'
+Cut.cpp(13): warning C4302: 'type cast': truncation from 'int *' to 'int'
+Cut.cpp(14): warning C4311: 'type cast': pointer truncation from 'int *' to 'int'
+Cut.cpp(14): warning C4302: 'type cast': truncation from 'int *' to 'int'
+Cut.cpp(15): warning C4311: 'type cast': pointer truncation from 'int *' to 'int'
+Cut.cpp(15): warning C4302: 'type cast': truncation from 'int *' to 'int'
+Cut.cpp(16): warning C4311: 'type cast': pointer truncation from 'int *' to 'int'
+Cut.cpp(16): warning C4302: 'type cast': truncation from 'int *' to 'int'
+  Figure.cpp
+  Fill.cpp
+  MyForm.cpp
+d:\bresenhem_algo\sem1\MyForm.h(53): warning C4677: 'figures': signature of non-private member contains assembly private type 'sem1::Figure'
+  d:\bresenhem_algo\sem1\Figure.h(11): note: see declaration of 'sem1::Figure'
+  Generating Code...
   Bresenhem.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
   sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.exe
   sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.pdb (Partial PDB)

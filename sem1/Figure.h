@@ -1,3 +1,4 @@
+//All the info is in the about
 #pragma once
 namespace sem1 {
 	enum class FigureType {

@@ -1,3 +1,4 @@
+//All the info is in the about
 #include "Bresenhem.h"
 using namespace sem1;
 using namespace std;
