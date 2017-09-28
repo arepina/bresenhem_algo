@@ -280,27 +280,27 @@ System::Void sem1::MyForm::draw_window(int ex, int ey)
 			xl = first->X;
 			xp = current.X;
 			if (first->Y < current.Y) {
-				yv = current.Y;
-				yn = first->Y;
+				yn = current.Y;
+				yv = first->Y;
 				rect = System::Drawing::Rectangle(first->X, first->Y, abs(current.X - first->X), abs(current.Y - first->Y));
 			}
 			else {
-				yn = current.Y;
-				yv = first->Y;
+				yn = first->Y;
+				yv = current.Y;
 				rect = System::Drawing::Rectangle(first->X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
 			}
 		}
 		else {
-			xp = first->X;
 			xl = current.X;
+			xp = first->X;			
 			if (first->Y < current.Y) {
-				yv = current.Y;
-				yn = first->Y;
+				yn = current.Y;
+				yv = first->Y;
 				rect = System::Drawing::Rectangle(current.X, first->Y, abs(current.X - first->X), abs(current.Y - first->Y));
 			}
 			else {
-				yn = current.Y;
-				yv = first->Y;
+				yn = first->Y;
+				yv = current.Y;
 				rect = System::Drawing::Rectangle(current.X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
 			}
 		}
