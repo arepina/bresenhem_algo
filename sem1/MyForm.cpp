@@ -157,7 +157,7 @@ System::Void sem1::MyForm::aboutProgramToolStripMenuItem_Click(System::Object^  
 		"Выполнены пункты:\n" +
 		"1)bresenham line, circle ellipse algos\n" + 
 		"2)fill line by line, xor fill, window cut\n\n" +
-		"Для удоства выполнения различных функций используются вкладки меню. Чтобы создать один из трех объектов: линия, круг, эллипс требуется выбрать тип объекта, вариант отрисовки, а также желаемый цвет на 1 вкладке. Далее достаточно просто нажатием мыши задавать координаты фигур. Для заливки требуется выбрать вкладку номер 2, где, выбрав цвет заливки, можно выполнить зиливку фигуры также жатием кнопки мыши на стартовый пиксель(тот, от которого идет заливка). С помощью 3 вкладки можно выполнить отсечение. На данной вкладке доступны для рисования лишь отрезки, чтобы отсечь которые требуется перейти в режим окна и нарисовать таковое двумя кликами мыши. Кроме того для вышеописанных действий имеется возможность загрузки/сохранения данных в файл.", "О программе");
+		"Для удоства выполнения различных функций используются вкладки меню. Чтобы создать один из трех объектов: линия, круг, эллипс требуется выбрать тип объекта, вариант отрисовки, а также желаемый цвет на 1 вкладке. Далее достаточно просто нажатием мыши задавать координаты фигур. Для заливки требуется выбрать вкладку номер 2, где, выбрав цвет заливки, можно выполнить зиливку фигуры также жатием кнопки мыши на стартовый пиксель(тот, от которого идет заливка). С помощью 3 вкладки можно выполнить отсечение. На данной вкладке доступны для рисования лишь отрезки, чтобы отсечь которые требуется перейти в режим окна и нарисовать таковое двумя кликами мыши. Кроме того для вышеописанных действий имеется возможность загрузки/сохранения данных в файл. В файле хранятся данные о названии фигуры, а также требуемые для их отрисовки координаты. Пример входных данных представлен в файле figures.txt", "О программе");
 }
 
 System::Void sem1::MyForm::createObjectToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
@@ -222,9 +222,9 @@ System::Void sem1::MyForm::existedMethodChecker_CheckedChanged(System::Object^  
 
 System::Void sem1::MyForm::draw_line_by_line(int ex, int ey)
 {
-	stack<pair<int, int>> pixel;
-	pixel.push(make_pair(ex, ey));
-	Fill::row_by_row_fill(pixel, ex, ey, gcnew SolidBrush(color_chooser->BackColor), bm, im, canvas, current_color);
+	System::Collections::Generic::Stack<Point> ^pixel = gcnew System::Collections::Generic::Stack<Point>();
+	pixel->Push(Point(ex, ey));
+	Fill::row_by_row_fill(pixel, gcnew SolidBrush(color_chooser->BackColor), bm, im, canvas, current_color);
 }
 
 System::Void sem1::MyForm::draw_xor(int ex, int ey)
@@ -244,14 +244,44 @@ System::Void sem1::MyForm::draw_window(int ex, int ey)
 		f->create_rect(first->X, first->Y, current.X, current.Y);
 		figures->Add(f);
 		System::Drawing::Rectangle rect;
-		if (first->X < current.X)
-			first->Y < current.Y ?
-			rect = System::Drawing::Rectangle(first->X, first->Y, abs(current.X - first->X), abs(current.Y - first->Y)) : rect = System::Drawing::Rectangle(first->X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
-		else
-			first->Y < current.Y ?
-			rect = System::Drawing::Rectangle(current.X, first->Y, abs(current.X - first->X), abs(current.Y - first->Y)) : rect = System::Drawing::Rectangle(current.X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
+		int xl, xp, yn, yv;
+		if (first->X < current.X) {
+			xl = first->X;
+			xp = current.X;
+			if (first->Y < current.Y) {
+				yv = current.Y;
+				yn = first->Y;
+				rect = System::Drawing::Rectangle(first->X, first->Y, abs(current.X - first->X), abs(current.Y - first->Y));
+			}
+			else {
+				yn = current.Y;
+				yv = first->Y;
+				rect = System::Drawing::Rectangle(first->X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
+			}
+		}
+		else {
+			xp = first->X;
+			xl = current.X;
+			if (first->Y < current.Y) {
+				yv = current.Y;
+				yn = first->Y;
+				rect = System::Drawing::Rectangle(current.X, first->Y, abs(current.X - first->X), abs(current.Y - first->Y));
+			}
+			else {
+				yn = current.Y;
+				yv = first->Y;
+				rect = System::Drawing::Rectangle(current.X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
+			}
+		}
 		im->DrawRectangle(gcnew Pen(current_color->BackColor), rect);
-		dots->Clear();
+		dots->Clear(); 
+		List<Figure^>^ lines = gcnew List<Figure^>();
+		for each (Figure^ fig in figures)
+		{
+			if (fig->getFigureType() == FigureType::Line)
+				lines->Add(fig);
+		}
+		Cut::process_lines_cut(xl, xp, yv, yn, lines, im);
 	}
 	else
 		dots->Add(current);

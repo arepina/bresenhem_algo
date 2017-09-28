@@ -11,7 +11,7 @@ namespace sem1 {
 	ref class Fill
 	{
 	public:
-		static void row_by_row_fill(stack<pair<int, int>> pixel, int ex, int ey, SolidBrush^ fill_color, Bitmap^ bm, Graphics^ im, PictureBox^ canvas, PictureBox^ current_color);
+		static void row_by_row_fill(System::Collections::Generic::Stack<Point>^ pixel, SolidBrush^ fill_color, Bitmap^ bm, Graphics^ im, PictureBox^ canvas, PictureBox^ current_color);
 		static void xor_fill(int ex, int ey);
 	};
 }

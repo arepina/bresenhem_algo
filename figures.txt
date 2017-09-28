@@ -1,5 +1,8 @@
-line 104 108 156 207
-line 113 241 227 136
-line 301 193 247 100
-circle 148 84 82
-ellipse 423 166 97 110
+circle 174 127 17
+circle 227 134 73
+circle 298 179 53
+circle 372 147 34
+circle 315 169 153
+circle 172 150 69
+circle 119 168 67
+circle 461 156 78
