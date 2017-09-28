@@ -48,35 +48,34 @@ namespace sem1 {
 			}
 		}
 
-	public: 
-			List<Point>^ dots = gcnew List<Point>();
-			List<Figure^>^ figures = gcnew List<Figure^>();
-			static Bitmap ^bm;
-			static Graphics ^im;				
-			bool existed_method, is_line_by_line, is_xor, is_window_mode;
+	public:
+		List<Point>^ dots = gcnew List<Point>();
+		List<Figure^>^ figures = gcnew List<Figure^>();
+		static Bitmap ^bm;
+		static Graphics ^im;
+		bool existed_method, is_line_by_line, is_xor, is_window_mode, is_objects, is_line, is_circle, is_ellipse;
 	private: System::Windows::Forms::PictureBox^  canvas;
 			 System::Windows::Forms::MenuStrip^  menuStrip1;
 			 System::Windows::Forms::ToolStripMenuItem^  createObjectToolStripMenuItem;
 			 System::Windows::Forms::ToolStripMenuItem^  aboutProgramToolStripMenuItem;
-			 System::Windows::Forms::Button^  clear;
 			 System::Windows::Forms::CheckBox^  existedMethodChecker;
-			 System::Windows::Forms::ComboBox^  objects;
-			 System::Windows::Forms::Button^  random_generate;
-			 System::Windows::Forms::Button^  draw_from_file;
-			 System::Windows::Forms::GroupBox^  fill_groupbox;
-			 System::Windows::Forms::RadioButton^  xor_fill;
-			 System::Windows::Forms::RadioButton^  line_by_line_fill;
-			 System::Windows::Forms::GroupBox^  draw_groupbox;
 			 System::Windows::Forms::ToolStripMenuItem^  fillToolStripMenuItem;
 			 System::Windows::Forms::ToolStripMenuItem^  cutToolStripMenuItem;
-			 System::Windows::Forms::GroupBox^  cut_groupbox;
-			 System::Windows::Forms::Button^  load_lines;
-			 System::Windows::Forms::CheckBox^  window_mode;
 			 System::Windows::Forms::ColorDialog^  colorDialog1;
 			 System::Windows::Forms::Button^  color_chooser;
 			 System::Windows::Forms::PictureBox^  current_color;
 			 System::Windows::Forms::Label^  label2;
-	private: System::Windows::Forms::Button^  save_to_file;
+			 System::Windows::Forms::ToolStripMenuItem^  ðàáîòàÑÔàéëîìToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  loadfileToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  savefileToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  cleanToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  lineByLineToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  xorToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  LineToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  circleToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  ellipseToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  randomToolStripMenuItem;
+
 
 	protected:
 
@@ -96,31 +95,26 @@ namespace sem1 {
 			this->canvas = (gcnew System::Windows::Forms::PictureBox());
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->createObjectToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->LineToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->circleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->ellipseToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->fillToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->lineByLineToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->xorToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->cutToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->ðàáîòàÑÔàéëîìToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->loadfileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->savefileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->cleanToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutProgramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->clear = (gcnew System::Windows::Forms::Button());
 			this->existedMethodChecker = (gcnew System::Windows::Forms::CheckBox());
-			this->objects = (gcnew System::Windows::Forms::ComboBox());
-			this->random_generate = (gcnew System::Windows::Forms::Button());
-			this->draw_from_file = (gcnew System::Windows::Forms::Button());
-			this->fill_groupbox = (gcnew System::Windows::Forms::GroupBox());
-			this->xor_fill = (gcnew System::Windows::Forms::RadioButton());
-			this->line_by_line_fill = (gcnew System::Windows::Forms::RadioButton());
-			this->draw_groupbox = (gcnew System::Windows::Forms::GroupBox());
-			this->cut_groupbox = (gcnew System::Windows::Forms::GroupBox());
-			this->window_mode = (gcnew System::Windows::Forms::CheckBox());
-			this->load_lines = (gcnew System::Windows::Forms::Button());
 			this->colorDialog1 = (gcnew System::Windows::Forms::ColorDialog());
 			this->color_chooser = (gcnew System::Windows::Forms::Button());
 			this->current_color = (gcnew System::Windows::Forms::PictureBox());
 			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->save_to_file = (gcnew System::Windows::Forms::Button());
+			this->randomToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->canvas))->BeginInit();
 			this->menuStrip1->SuspendLayout();
-			this->fill_groupbox->SuspendLayout();
-			this->draw_groupbox->SuspendLayout();
-			this->cut_groupbox->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->current_color))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -136,9 +130,10 @@ namespace sem1 {
 			// 
 			// menuStrip1
 			// 
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(7) {
 				this->createObjectToolStripMenuItem,
-					this->fillToolStripMenuItem, this->cutToolStripMenuItem, this->aboutProgramToolStripMenuItem
+					this->randomToolStripMenuItem, this->fillToolStripMenuItem, this->cutToolStripMenuItem, this->ðàáîòàÑÔàéëîìToolStripMenuItem,
+					this->cleanToolStripMenuItem, this->aboutProgramToolStripMenuItem
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
@@ -148,17 +143,59 @@ namespace sem1 {
 			// 
 			// createObjectToolStripMenuItem
 			// 
+			this->createObjectToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+				this->LineToolStripMenuItem,
+					this->circleToolStripMenuItem, this->ellipseToolStripMenuItem
+			});
 			this->createObjectToolStripMenuItem->Name = L"createObjectToolStripMenuItem";
 			this->createObjectToolStripMenuItem->Size = System::Drawing::Size(112, 20);
 			this->createObjectToolStripMenuItem->Text = L"Ñîçäàòü îáúåêòû";
 			this->createObjectToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::createObjectToolStripMenuItem_Click);
 			// 
+			// LineToolStripMenuItem
+			// 
+			this->LineToolStripMenuItem->Name = L"LineToolStripMenuItem";
+			this->LineToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->LineToolStripMenuItem->Text = L"Ëèíèÿ";
+			this->LineToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::LineToolStripMenuItem_Click);
+			// 
+			// circleToolStripMenuItem
+			// 
+			this->circleToolStripMenuItem->Name = L"circleToolStripMenuItem";
+			this->circleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->circleToolStripMenuItem->Text = L"Êðóã";
+			this->circleToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::circleToolStripMenuItem_Click);
+			// 
+			// ellipseToolStripMenuItem
+			// 
+			this->ellipseToolStripMenuItem->Name = L"ellipseToolStripMenuItem";
+			this->ellipseToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->ellipseToolStripMenuItem->Text = L"Ýëëèïñ";
+			this->ellipseToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ellipseToolStripMenuItem_Click);
+			// 
 			// fillToolStripMenuItem
 			// 
+			this->fillToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->lineByLineToolStripMenuItem,
+					this->xorToolStripMenuItem
+			});
 			this->fillToolStripMenuItem->Name = L"fillToolStripMenuItem";
 			this->fillToolStripMenuItem->Size = System::Drawing::Size(64, 20);
 			this->fillToolStripMenuItem->Text = L"Çàëèâêà";
-			this->fillToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::fillToolStripMenuItem_Click);
+			// 
+			// lineByLineToolStripMenuItem
+			// 
+			this->lineByLineToolStripMenuItem->Name = L"lineByLineToolStripMenuItem";
+			this->lineByLineToolStripMenuItem->Size = System::Drawing::Size(141, 22);
+			this->lineByLineToolStripMenuItem->Text = L"Ïîñòðî÷íàÿ";
+			this->lineByLineToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::lineByLineToolStripMenuItem_Click);
+			// 
+			// xorToolStripMenuItem
+			// 
+			this->xorToolStripMenuItem->Name = L"xorToolStripMenuItem";
+			this->xorToolStripMenuItem->Size = System::Drawing::Size(141, 22);
+			this->xorToolStripMenuItem->Text = L"XOR";
+			this->xorToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::xorToolStripMenuItem_Click);
 			// 
 			// cutToolStripMenuItem
 			// 
@@ -167,6 +204,37 @@ namespace sem1 {
 			this->cutToolStripMenuItem->Text = L"Îòñå÷åíèå";
 			this->cutToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::cutToolStripMenuItem_Click);
 			// 
+			// ðàáîòàÑÔàéëîìToolStripMenuItem
+			// 
+			this->ðàáîòàÑÔàéëîìToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+				this->loadfileToolStripMenuItem,
+					this->savefileToolStripMenuItem
+			});
+			this->ðàáîòàÑÔàéëîìToolStripMenuItem->Name = L"ðàáîòàÑÔàéëîìToolStripMenuItem";
+			this->ðàáîòàÑÔàéëîìToolStripMenuItem->Size = System::Drawing::Size(114, 20);
+			this->ðàáîòàÑÔàéëîìToolStripMenuItem->Text = L"Ðàáîòà ñ ôàéëîì";
+			// 
+			// loadfileToolStripMenuItem
+			// 
+			this->loadfileToolStripMenuItem->Name = L"loadfileToolStripMenuItem";
+			this->loadfileToolStripMenuItem->Size = System::Drawing::Size(140, 22);
+			this->loadfileToolStripMenuItem->Text = L"Çàãðóçêà";
+			this->loadfileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::loadfileToolStripMenuItem_Click);
+			// 
+			// savefileToolStripMenuItem
+			// 
+			this->savefileToolStripMenuItem->Name = L"savefileToolStripMenuItem";
+			this->savefileToolStripMenuItem->Size = System::Drawing::Size(140, 22);
+			this->savefileToolStripMenuItem->Text = L"Ñîõðàíåíèå";
+			this->savefileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::savefileToolStripMenuItem_Click);
+			// 
+			// cleanToolStripMenuItem
+			// 
+			this->cleanToolStripMenuItem->Name = L"cleanToolStripMenuItem";
+			this->cleanToolStripMenuItem->Size = System::Drawing::Size(71, 20);
+			this->cleanToolStripMenuItem->Text = L"Î÷èñòèòü";
+			this->cleanToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::cleanToolStripMenuItem_Click);
+			// 
 			// aboutProgramToolStripMenuItem
 			// 
 			this->aboutProgramToolStripMenuItem->Name = L"aboutProgramToolStripMenuItem";
@@ -174,20 +242,10 @@ namespace sem1 {
 			this->aboutProgramToolStripMenuItem->Text = L"Î ïðîãðàììå";
 			this->aboutProgramToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::aboutProgramToolStripMenuItem_Click);
 			// 
-			// clear
-			// 
-			this->clear->Location = System::Drawing::Point(12, 309);
-			this->clear->Name = L"clear";
-			this->clear->Size = System::Drawing::Size(151, 31);
-			this->clear->TabIndex = 5;
-			this->clear->Text = L"Î÷èñòèòü";
-			this->clear->UseVisualStyleBackColor = true;
-			this->clear->Click += gcnew System::EventHandler(this, &MyForm::clear_Click);
-			// 
 			// existedMethodChecker
 			// 
 			this->existedMethodChecker->AutoSize = true;
-			this->existedMethodChecker->Location = System::Drawing::Point(6, 46);
+			this->existedMethodChecker->Location = System::Drawing::Point(15, 102);
 			this->existedMethodChecker->Name = L"existedMethodChecker";
 			this->existedMethodChecker->Size = System::Drawing::Size(138, 17);
 			this->existedMethodChecker->TabIndex = 28;
@@ -195,123 +253,9 @@ namespace sem1 {
 			this->existedMethodChecker->UseVisualStyleBackColor = true;
 			this->existedMethodChecker->CheckedChanged += gcnew System::EventHandler(this, &MyForm::existedMethodChecker_CheckedChanged);
 			// 
-			// objects
-			// 
-			this->objects->DisplayMember = L"Îòðåçîê";
-			this->objects->FormattingEnabled = true;
-			this->objects->IntegralHeight = false;
-			this->objects->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Îòðåçîê", L"Îêðóæíîñòü", L"Ýëëèïñ" });
-			this->objects->Location = System::Drawing::Point(6, 19);
-			this->objects->Name = L"objects";
-			this->objects->Size = System::Drawing::Size(138, 21);
-			this->objects->TabIndex = 29;
-			// 
-			// random_generate
-			// 
-			this->random_generate->Location = System::Drawing::Point(6, 69);
-			this->random_generate->Name = L"random_generate";
-			this->random_generate->Size = System::Drawing::Size(138, 23);
-			this->random_generate->TabIndex = 30;
-			this->random_generate->Text = L"Ðàíäîìíàÿ ãåíåðàöèÿ";
-			this->random_generate->UseVisualStyleBackColor = true;
-			this->random_generate->Click += gcnew System::EventHandler(this, &MyForm::random_generate_Click);
-			// 
-			// draw_from_file
-			// 
-			this->draw_from_file->Location = System::Drawing::Point(6, 98);
-			this->draw_from_file->Name = L"draw_from_file";
-			this->draw_from_file->Size = System::Drawing::Size(138, 26);
-			this->draw_from_file->TabIndex = 31;
-			this->draw_from_file->Text = L"Ðèñîâàòü èç ôàéëà";
-			this->draw_from_file->UseVisualStyleBackColor = true;
-			this->draw_from_file->Click += gcnew System::EventHandler(this, &MyForm::draw_from_file_Click);
-			// 
-			// fill_groupbox
-			// 
-			this->fill_groupbox->Controls->Add(this->xor_fill);
-			this->fill_groupbox->Controls->Add(this->line_by_line_fill);
-			this->fill_groupbox->Location = System::Drawing::Point(12, 27);
-			this->fill_groupbox->Name = L"fill_groupbox";
-			this->fill_groupbox->Size = System::Drawing::Size(151, 100);
-			this->fill_groupbox->TabIndex = 33;
-			this->fill_groupbox->TabStop = false;
-			this->fill_groupbox->Text = L"Çàëèâêà";
-			this->fill_groupbox->Visible = false;
-			// 
-			// xor_fill
-			// 
-			this->xor_fill->AutoSize = true;
-			this->xor_fill->Location = System::Drawing::Point(7, 44);
-			this->xor_fill->Name = L"xor_fill";
-			this->xor_fill->Size = System::Drawing::Size(48, 17);
-			this->xor_fill->TabIndex = 1;
-			this->xor_fill->Text = L"XOR";
-			this->xor_fill->UseVisualStyleBackColor = true;
-			this->xor_fill->CheckedChanged += gcnew System::EventHandler(this, &MyForm::xor_fill_CheckedChanged);
-			// 
-			// line_by_line_fill
-			// 
-			this->line_by_line_fill->AutoSize = true;
-			this->line_by_line_fill->Checked = true;
-			this->line_by_line_fill->Location = System::Drawing::Point(7, 20);
-			this->line_by_line_fill->Name = L"line_by_line_fill";
-			this->line_by_line_fill->Size = System::Drawing::Size(85, 17);
-			this->line_by_line_fill->TabIndex = 0;
-			this->line_by_line_fill->TabStop = true;
-			this->line_by_line_fill->Text = L"Ïîñòðî÷íàÿ";
-			this->line_by_line_fill->UseVisualStyleBackColor = true;
-			this->line_by_line_fill->CheckedChanged += gcnew System::EventHandler(this, &MyForm::line_by_line_fill_CheckedChanged);
-			// 
-			// draw_groupbox
-			// 
-			this->draw_groupbox->Controls->Add(this->save_to_file);
-			this->draw_groupbox->Controls->Add(this->objects);
-			this->draw_groupbox->Controls->Add(this->existedMethodChecker);
-			this->draw_groupbox->Controls->Add(this->draw_from_file);
-			this->draw_groupbox->Controls->Add(this->random_generate);
-			this->draw_groupbox->Location = System::Drawing::Point(12, 27);
-			this->draw_groupbox->Name = L"draw_groupbox";
-			this->draw_groupbox->Size = System::Drawing::Size(151, 156);
-			this->draw_groupbox->TabIndex = 34;
-			this->draw_groupbox->TabStop = false;
-			this->draw_groupbox->Text = L"Ðèñîâàíèå";
-			// 
-			// cut_groupbox
-			// 
-			this->cut_groupbox->Controls->Add(this->window_mode);
-			this->cut_groupbox->Controls->Add(this->load_lines);
-			this->cut_groupbox->Location = System::Drawing::Point(12, 27);
-			this->cut_groupbox->Name = L"cut_groupbox";
-			this->cut_groupbox->Size = System::Drawing::Size(151, 113);
-			this->cut_groupbox->TabIndex = 35;
-			this->cut_groupbox->TabStop = false;
-			this->cut_groupbox->Text = L"Îòñå÷åíèå";
-			this->cut_groupbox->Visible = false;
-			// 
-			// window_mode
-			// 
-			this->window_mode->AutoSize = true;
-			this->window_mode->Location = System::Drawing::Point(7, 71);
-			this->window_mode->Name = L"window_mode";
-			this->window_mode->Size = System::Drawing::Size(88, 17);
-			this->window_mode->TabIndex = 5;
-			this->window_mode->Text = L"Ðåæèì îêíà";
-			this->window_mode->UseVisualStyleBackColor = true;
-			this->window_mode->CheckedChanged += gcnew System::EventHandler(this, &MyForm::window_mode_CheckedChanged);
-			// 
-			// load_lines
-			// 
-			this->load_lines->Location = System::Drawing::Point(7, 20);
-			this->load_lines->Name = L"load_lines";
-			this->load_lines->Size = System::Drawing::Size(131, 44);
-			this->load_lines->TabIndex = 4;
-			this->load_lines->Text = L"Çàãðóçèòü îòðåçêè èç ôàéëà";
-			this->load_lines->UseVisualStyleBackColor = true;
-			this->load_lines->Click += gcnew System::EventHandler(this, &MyForm::load_lines_Click);
-			// 
 			// color_chooser
 			// 
-			this->color_chooser->Location = System::Drawing::Point(12, 227);
+			this->color_chooser->Location = System::Drawing::Point(9, 73);
 			this->color_chooser->Name = L"color_chooser";
 			this->color_chooser->Size = System::Drawing::Size(151, 23);
 			this->color_chooser->TabIndex = 36;
@@ -322,7 +266,7 @@ namespace sem1 {
 			// current_color
 			// 
 			this->current_color->BackColor = System::Drawing::Color::White;
-			this->current_color->Location = System::Drawing::Point(99, 189);
+			this->current_color->Location = System::Drawing::Point(96, 35);
 			this->current_color->Name = L"current_color";
 			this->current_color->Size = System::Drawing::Size(32, 32);
 			this->current_color->TabIndex = 37;
@@ -331,34 +275,28 @@ namespace sem1 {
 			// label2
 			// 
 			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(15, 197);
+			this->label2->Location = System::Drawing::Point(12, 43);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(78, 13);
 			this->label2->TabIndex = 38;
 			this->label2->Text = L"Òåêóùèé öâåò";
 			// 
-			// save_to_file
+			// randomToolStripMenuItem
 			// 
-			this->save_to_file->Location = System::Drawing::Point(6, 131);
-			this->save_to_file->Name = L"save_to_file";
-			this->save_to_file->Size = System::Drawing::Size(138, 23);
-			this->save_to_file->TabIndex = 32;
-			this->save_to_file->Text = L"Ñîõðàíèòü â ôàéë";
-			this->save_to_file->UseVisualStyleBackColor = true;
-			this->save_to_file->Click += gcnew System::EventHandler(this, &MyForm::save_to_file_Click);
+			this->randomToolStripMenuItem->Name = L"randomToolStripMenuItem";
+			this->randomToolStripMenuItem->Size = System::Drawing::Size(61, 20);
+			this->randomToolStripMenuItem->Text = L"Ðàíäîì";
+			this->randomToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::randomToolStripMenuItem_Click_1);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(826, 365);
+			this->Controls->Add(this->existedMethodChecker);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->current_color);
 			this->Controls->Add(this->color_chooser);
-			this->Controls->Add(this->cut_groupbox);
-			this->Controls->Add(this->draw_groupbox);
-			this->Controls->Add(this->fill_groupbox);
-			this->Controls->Add(this->clear);
 			this->Controls->Add(this->canvas);
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
@@ -367,12 +305,6 @@ namespace sem1 {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->canvas))->EndInit();
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
-			this->fill_groupbox->ResumeLayout(false);
-			this->fill_groupbox->PerformLayout();
-			this->draw_groupbox->ResumeLayout(false);
-			this->draw_groupbox->PerformLayout();
-			this->cut_groupbox->ResumeLayout(false);
-			this->cut_groupbox->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->current_color))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
@@ -391,16 +323,18 @@ namespace sem1 {
 	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e);//changed the drawing way
 	private: System::Void clear_Click(System::Object^  sender, System::EventArgs^  e);//clear the canvas
 	private: System::Void aboutProgramToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);//info
-	private: System::Void random_generate_Click(System::Object^  sender, System::EventArgs^  e);////random button clicked
-	private: System::Void draw_from_file_Click(System::Object^  sender, System::EventArgs^  e);//draw from file
-	private: System::Void line_by_line_fill_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void xor_fill_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void createObjectToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void fillToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void cutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void load_lines_Click(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void window_mode_CheckedChanged(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void color_chooser_Click(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void save_to_file_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void loadfileToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void savefileToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void cleanToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void lineByLineToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void xorToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void LineToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void circleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void ellipseToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+	private: System::Void randomToolStripMenuItem_Click_1(System::Object^  sender, System::EventArgs^  e);
 };
 }

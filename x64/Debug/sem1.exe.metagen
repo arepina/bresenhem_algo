@@ -24,5 +24,9 @@ Class sem1.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Boolean is_line_by_line : Public
     Boolean is_xor : Public
     Boolean is_window_mode : Public
+    Boolean is_objects : Public
+    Boolean is_line : Public
+    Boolean is_circle : Public
+    Boolean is_ellipse : Public
     System.Drawing.Bitmap bm : Public, Static
     System.Drawing.Graphics im : Public, Static
