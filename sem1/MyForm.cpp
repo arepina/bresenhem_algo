@@ -88,7 +88,6 @@ System::Void sem1::MyForm::cutToolStripMenuItem_Click(System::Object ^ sender, S
 
 System::Void sem1::MyForm::loadfileToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
-	Brush^b = gcnew SolidBrush(current_color->BackColor);
 	OpenFileDialog ^fd = gcnew OpenFileDialog;
 	fd->Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
 	if (fd->ShowDialog() == System::Windows::Forms::DialogResult::OK)
@@ -109,25 +108,28 @@ System::Void sem1::MyForm::loadfileToolStripMenuItem_Click(System::Object ^ send
 				{
 					is_line = true;
 					Figure^ f = gcnew Figure();
-					f->create_line(stoi(v.at(1)), stoi(v.at(2)), stoi(v.at(3)), stoi(v.at(4)));
+					Color c = Color::FromArgb(stoi(v.at(5)));
+					f->create_line(stoi(v.at(1)), stoi(v.at(2)), stoi(v.at(3)), stoi(v.at(4)), c);
 					figures->Add(f);
-					Bresenhem::bres_line(f, im, b);
+					Bresenhem::bres_line(f, im, gcnew SolidBrush(c));
 				}
 				if (v.at(0) == "circle")
 				{
 					is_circle = true;
 					Figure^ f = gcnew Figure();
-					f->create_circle(stoi(v.at(1)), stoi(v.at(2)), stoi(v.at(3)));
+					Color c = Color::FromArgb(stoi(v.at(4)));
+					f->create_circle(stoi(v.at(1)), stoi(v.at(2)), stoi(v.at(3)), c);
 					figures->Add(f);
-					Bresenhem::bres_circle(f, im, b);
+					Bresenhem::bres_circle(f, im, gcnew SolidBrush(c));
 				}
 				if (v.at(0) == "ellipse")
 				{
 					is_ellipse = true;
 					Figure^ f = gcnew Figure();
-					f->create_ellipse(stoi(v.at(1)), stoi(v.at(2)), stoi(v.at(3)), stoi(v.at(4)));
+					Color c = Color::FromArgb(stoi(v.at(5)));
+					f->create_ellipse(stoi(v.at(1)), stoi(v.at(2)), stoi(v.at(3)), stoi(v.at(4)), c);
 					figures->Add(f);
-					Bresenhem::bres_ellipse(f, im, b);
+					Bresenhem::bres_ellipse(f, im, gcnew SolidBrush(c));
 				}
 			}
 			myfile.close();
@@ -151,9 +153,9 @@ System::Void sem1::MyForm::savefileToolStripMenuItem_Click(System::Object ^ send
 			String^ s;
 			switch (f->getFigureType())
 			{
-			case FigureType::Line: s = "line " + f->x1 + " " + f->y1 + " " + f->x2 + " " + f->y2; break;
-			case FigureType::Circle: s += "circle " + f->x1 + " " + f->y1 + " " + f->rad_first; break;
-			case FigureType::Ellipse: s += "ellipse " + f->x1 + " " + f->y1 + " " + f->rad_first + " " + f->rad_second; break;
+			case FigureType::Line: s = "line " + f->x1 + " " + f->y1 + " " + f->x2 + " " + f->y2 + " " + f->c.ToArgb(); break;
+			case FigureType::Circle: s += "circle " + f->x1 + " " + f->y1 + " " + f->rad_first + " " + f->c.ToArgb(); break;
+			case FigureType::Ellipse: s += "ellipse " + f->x1 + " " + f->y1 + " " + f->rad_first + " " + f->rad_second + " " + f->c.ToArgb(); break;
 			}
 			std::string unmanaged = msclr::interop::marshal_as<std::string>(s);
 			myfile << unmanaged << "\n";
@@ -226,18 +228,18 @@ System::Void sem1::MyForm::randomToolStripMenuItem_Click_1(System::Object ^ send
 		is_circle = false;
 		random_click_imitation(3);
 	}
-	
+
+}
+
+System::Void sem1::MyForm::colorChooserToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
+{
+	colorDialog1->ShowDialog();
+	current_color = colorDialog1->Color;
 }
 
 #pragma endregion Menu
 
 #pragma region Check Changed
-
-System::Void sem1::MyForm::color_chooser_Click(System::Object ^ sender, System::EventArgs ^ e)
-{
-	colorDialog1->ShowDialog();
-	current_color->BackColor = colorDialog1->Color;
-}
 
 System::Void sem1::MyForm::existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
 	existed_method = !existed_method;
@@ -253,7 +255,7 @@ System::Void sem1::MyForm::draw_line_by_line(int ex, int ey)
 {
 	System::Collections::Generic::Stack<Point> ^pixel = gcnew System::Collections::Generic::Stack<Point>();
 	pixel->Push(Point(ex, ey));
-	Fill::row_by_row_fill(pixel, gcnew SolidBrush(color_chooser->BackColor), bm, im, canvas, current_color);
+	Fill::row_by_row_fill(pixel, bm, im, canvas, current_color);
 }
 
 System::Void sem1::MyForm::draw_xor(int ex, int ey)
@@ -270,7 +272,7 @@ System::Void sem1::MyForm::draw_window(int ex, int ey)
 	{
 		Point^ first = dots[0];
 		Figure^ f = gcnew Figure();
-		f->create_rect(first->X, first->Y, current.X, current.Y);
+		f->create_rect(first->X, first->Y, current.X, current.Y, Color::Black);
 		figures->Add(f);
 		System::Drawing::Rectangle rect;
 		int xl, xp, yn, yv;
@@ -302,7 +304,7 @@ System::Void sem1::MyForm::draw_window(int ex, int ey)
 				rect = System::Drawing::Rectangle(current.X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
 			}
 		}
-		im->DrawRectangle(gcnew Pen(current_color->BackColor), rect);
+		im->DrawRectangle(gcnew Pen(Color::Black), rect);
 		dots->Clear();
 		List<Figure^>^ lines = gcnew List<Figure^>();
 		for each (Figure^ fig in figures)
@@ -318,38 +320,38 @@ System::Void sem1::MyForm::draw_window(int ex, int ey)
 
 System::Void sem1::MyForm::draw_objects(int ex, int ey)
 {
-	Brush^b = gcnew SolidBrush(current_color->BackColor);
+	Brush^b = gcnew SolidBrush(current_color);
 	Point current;
 	current.X = ex;
 	current.Y = ey;
-	if(is_line)//line
+	if (is_line)//line
 	{
 		if (dots->Count == 1) {
 			Point^ first = dots[0];
 			Figure^ f = gcnew Figure();
-			f->create_line(first->X, first->Y, current.X, current.Y);
+			f->create_line(first->X, first->Y, current.X, current.Y, current_color);
 			figures->Add(f);
-			!existed_method ? Bresenhem::bres_line(f, im, b) : im->DrawLine(gcnew Pen(current_color->BackColor), f->x1, f->y1, f->x2, f->y2);
+			!existed_method ? Bresenhem::bres_line(f, im, b) : im->DrawLine(gcnew Pen(current_color), f->x1, f->y1, f->x2, f->y2);
 			dots->Clear();
 		}
 		else
 			dots->Add(current);
 	}
-	if(is_circle)//circle
+	if (is_circle)//circle
 	{
 		if (dots->Count == 1) {
 			Point^ center = dots[0];
 			Figure^ f = gcnew Figure();
 			int radius = (int)sqrt(pow((abs(current.X - center->X)), 2) + pow((abs(current.Y - center->Y)), 2));
-			f->create_circle(center->X, center->Y, radius);
+			f->create_circle(center->X, center->Y, radius, current_color);
 			figures->Add(f);
-			!existed_method ? Bresenhem::bres_circle(f, im, b) : im->DrawEllipse(gcnew Pen(current_color->BackColor), center->X - radius, center->Y - radius, radius * 2, radius * 2);
+			!existed_method ? Bresenhem::bres_circle(f, im, b) : im->DrawEllipse(gcnew Pen(current_color), center->X - radius, center->Y - radius, radius * 2, radius * 2);
 			dots->Clear();
 		}
 		else
-			dots->Add(current);		
+			dots->Add(current);
 	}
-	if(is_ellipse)//ellipse
+	if (is_ellipse)//ellipse
 	{
 		if (dots->Count == 2)
 		{
@@ -358,9 +360,9 @@ System::Void sem1::MyForm::draw_objects(int ex, int ey)
 			Figure^ f = gcnew Figure();
 			int rad_first = (int)sqrt(pow((abs(width_click->X - center->X)), 2) + pow((abs(width_click->Y - center->Y)), 2));
 			int rad_second = (int)sqrt(pow((abs(current.X - center->X)), 2) + pow((abs(current.Y - center->Y)), 2));
-			f->create_ellipse(center->X, center->Y, rad_first, rad_second);
+			f->create_ellipse(center->X, center->Y, rad_first, rad_second, current_color);
 			figures->Add(f);
-			!existed_method ? Bresenhem::bres_ellipse(f, im, b) : im->DrawEllipse(gcnew Pen(current_color->BackColor), center->X - rad_first, center->Y - rad_first, rad_first * 2, rad_second * 2);
+			!existed_method ? Bresenhem::bres_ellipse(f, im, b) : im->DrawEllipse(gcnew Pen(current_color), center->X - rad_first, center->Y - rad_first, rad_first * 2, rad_second * 2);
 			dots->Clear();
 		}
 		else
@@ -387,7 +389,7 @@ sem1::MyForm::MyForm(void)
 	bm = gcnew Bitmap(canvas->Width, canvas->Height);
 	canvas->Image = bm;
 	im = Graphics::FromImage(bm);
-	current_color->BackColor = Color::Black;
+	current_color = Color::Black;
 	existed_method = false;
 	is_line_by_line = false;
 	is_xor = false;

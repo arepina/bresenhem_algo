@@ -20,6 +20,7 @@ Class sem1.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   Fields:
     System.Collections.Generic.List`1[System.Drawing.Point] dots : Public
     System.Collections.Generic.List`1[sem1.Figure] figures : Public
+    System.Drawing.Color current_color : Public
     Boolean existed_method : Public
     Boolean is_line_by_line : Public
     Boolean is_xor : Public

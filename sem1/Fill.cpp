@@ -19,7 +19,7 @@ void up_and_down(System::Collections::Generic::Stack<Point>^ pixel, Bitmap^ bm, 
 	}
 }
 
-System::Void sem1::Fill::row_by_row_fill(System::Collections::Generic::Stack<Point>^ pixel, SolidBrush^ fill_color, Bitmap^ bm, Graphics^ im, PictureBox^ canvas, PictureBox^ current_color)
+System::Void sem1::Fill::row_by_row_fill(System::Collections::Generic::Stack<Point>^ pixel, Bitmap^ bm, Graphics^ im, PictureBox^ canvas, Color current_color)
 {
 	Point current;
 	Color selected_pixel_color = bm->GetPixel(pixel->Peek().X, pixel->Peek().Y); // pixel color we first clicked on
@@ -31,20 +31,20 @@ System::Void sem1::Fill::row_by_row_fill(System::Collections::Generic::Stack<Poi
 		start = Point(current.X, current.Y);//remember the start point	
 		//go to the right
 		while (current.X + 1 < canvas->Width  && bm->GetPixel(current.X + 1, current.Y) == selected_pixel_color) {
-			im->FillRectangle(gcnew SolidBrush(current_color->BackColor), current.X, current.Y, 1, 1);
+			im->FillRectangle(gcnew SolidBrush(current_color), current.X, current.Y, 1, 1);
 			current.X++;
 		}
-		im->FillRectangle(gcnew SolidBrush(current_color->BackColor), current.X, current.Y, 1, 1);
+		im->FillRectangle(gcnew SolidBrush(current_color), current.X, current.Y, 1, 1);
 		//save the most right pixel
 		right = current;
 
 		current = start;//return to start point
 		//go to the left from start point
 		while (current.X - 1 > 0 && bm->GetPixel(current.X - 1, current.Y) == selected_pixel_color) {
-			im->FillRectangle(gcnew SolidBrush(current_color->BackColor), current.X, current.Y, 1, 1);
+			im->FillRectangle(gcnew SolidBrush(current_color), current.X, current.Y, 1, 1);
 			current.X--;
 		}
-		im->FillRectangle(gcnew SolidBrush(current_color->BackColor), current.X, current.Y, 1, 1);
+		im->FillRectangle(gcnew SolidBrush(current_color), current.X, current.Y, 1, 1);
 		
 		left = current;//save the most left pixel
 

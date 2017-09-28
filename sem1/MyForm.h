@@ -53,6 +53,7 @@ namespace sem1 {
 		List<Figure^>^ figures = gcnew List<Figure^>();
 		static Bitmap ^bm;
 		static Graphics ^im;
+		Color current_color;
 		bool existed_method, is_line_by_line, is_xor, is_window_mode, is_objects, is_line, is_circle, is_ellipse;
 	private: System::Windows::Forms::PictureBox^  canvas;
 			 System::Windows::Forms::MenuStrip^  menuStrip1;
@@ -62,9 +63,6 @@ namespace sem1 {
 			 System::Windows::Forms::ToolStripMenuItem^  fillToolStripMenuItem;
 			 System::Windows::Forms::ToolStripMenuItem^  cutToolStripMenuItem;
 			 System::Windows::Forms::ColorDialog^  colorDialog1;
-			 System::Windows::Forms::Button^  color_chooser;
-			 System::Windows::Forms::PictureBox^  current_color;
-			 System::Windows::Forms::Label^  label2;
 			 System::Windows::Forms::ToolStripMenuItem^  ðàáîòàÑÔàéëîìToolStripMenuItem;
 			 System::Windows::Forms::ToolStripMenuItem^  loadfileToolStripMenuItem;
 			 System::Windows::Forms::ToolStripMenuItem^  savefileToolStripMenuItem;
@@ -75,6 +73,9 @@ namespace sem1 {
 			 System::Windows::Forms::ToolStripMenuItem^  circleToolStripMenuItem;
 			 System::Windows::Forms::ToolStripMenuItem^  ellipseToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^  randomToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  colorChooserToolStripMenuItem;
+
+	private: System::Windows::Forms::StatusStrip^  statusStrip1;
 
 
 	protected:
@@ -98,6 +99,7 @@ namespace sem1 {
 			this->LineToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->circleToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->ellipseToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->randomToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->fillToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->lineByLineToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->xorToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -106,38 +108,36 @@ namespace sem1 {
 			this->loadfileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->savefileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->cleanToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->colorChooserToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->aboutProgramToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->existedMethodChecker = (gcnew System::Windows::Forms::CheckBox());
 			this->colorDialog1 = (gcnew System::Windows::Forms::ColorDialog());
-			this->color_chooser = (gcnew System::Windows::Forms::Button());
-			this->current_color = (gcnew System::Windows::Forms::PictureBox());
-			this->label2 = (gcnew System::Windows::Forms::Label());
-			this->randomToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->canvas))->BeginInit();
 			this->menuStrip1->SuspendLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->current_color))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// canvas
 			// 
 			this->canvas->BackColor = System::Drawing::Color::White;
-			this->canvas->Location = System::Drawing::Point(194, 43);
+			this->canvas->Location = System::Drawing::Point(-71, 27);
 			this->canvas->Name = L"canvas";
-			this->canvas->Size = System::Drawing::Size(620, 297);
+			this->canvas->Size = System::Drawing::Size(1532, 686);
 			this->canvas->TabIndex = 0;
 			this->canvas->TabStop = false;
 			this->canvas->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::canvas_MouseClick);
 			// 
 			// menuStrip1
 			// 
-			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(7) {
+			this->menuStrip1->BackColor = System::Drawing::SystemColors::ControlLight;
+			this->menuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(8) {
 				this->createObjectToolStripMenuItem,
 					this->randomToolStripMenuItem, this->fillToolStripMenuItem, this->cutToolStripMenuItem, this->ðàáîòàÑÔàéëîìToolStripMenuItem,
-					this->cleanToolStripMenuItem, this->aboutProgramToolStripMenuItem
+					this->cleanToolStripMenuItem, this->colorChooserToolStripMenuItem, this->aboutProgramToolStripMenuItem
 			});
 			this->menuStrip1->Location = System::Drawing::Point(0, 0);
 			this->menuStrip1->Name = L"menuStrip1";
-			this->menuStrip1->Size = System::Drawing::Size(826, 24);
+			this->menuStrip1->Size = System::Drawing::Size(845, 24);
 			this->menuStrip1->TabIndex = 2;
 			this->menuStrip1->Text = L"menuStrip1";
 			// 
@@ -155,23 +155,30 @@ namespace sem1 {
 			// LineToolStripMenuItem
 			// 
 			this->LineToolStripMenuItem->Name = L"LineToolStripMenuItem";
-			this->LineToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->LineToolStripMenuItem->Size = System::Drawing::Size(115, 22);
 			this->LineToolStripMenuItem->Text = L"Ëèíèÿ";
 			this->LineToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::LineToolStripMenuItem_Click);
 			// 
 			// circleToolStripMenuItem
 			// 
 			this->circleToolStripMenuItem->Name = L"circleToolStripMenuItem";
-			this->circleToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->circleToolStripMenuItem->Size = System::Drawing::Size(115, 22);
 			this->circleToolStripMenuItem->Text = L"Êðóã";
 			this->circleToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::circleToolStripMenuItem_Click);
 			// 
 			// ellipseToolStripMenuItem
 			// 
 			this->ellipseToolStripMenuItem->Name = L"ellipseToolStripMenuItem";
-			this->ellipseToolStripMenuItem->Size = System::Drawing::Size(152, 22);
+			this->ellipseToolStripMenuItem->Size = System::Drawing::Size(115, 22);
 			this->ellipseToolStripMenuItem->Text = L"Ýëëèïñ";
 			this->ellipseToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ellipseToolStripMenuItem_Click);
+			// 
+			// randomToolStripMenuItem
+			// 
+			this->randomToolStripMenuItem->Name = L"randomToolStripMenuItem";
+			this->randomToolStripMenuItem->Size = System::Drawing::Size(61, 20);
+			this->randomToolStripMenuItem->Text = L"Ðàíäîì";
+			this->randomToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::randomToolStripMenuItem_Click_1);
 			// 
 			// fillToolStripMenuItem
 			// 
@@ -235,6 +242,13 @@ namespace sem1 {
 			this->cleanToolStripMenuItem->Text = L"Î÷èñòèòü";
 			this->cleanToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::cleanToolStripMenuItem_Click);
 			// 
+			// colorChooserToolStripMenuItem
+			// 
+			this->colorChooserToolStripMenuItem->Name = L"colorChooserToolStripMenuItem";
+			this->colorChooserToolStripMenuItem->Size = System::Drawing::Size(89, 20);
+			this->colorChooserToolStripMenuItem->Text = L"Âûáîð öâåòà";
+			this->colorChooserToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::colorChooserToolStripMenuItem_Click);
+			// 
 			// aboutProgramToolStripMenuItem
 			// 
 			this->aboutProgramToolStripMenuItem->Name = L"aboutProgramToolStripMenuItem";
@@ -245,58 +259,30 @@ namespace sem1 {
 			// existedMethodChecker
 			// 
 			this->existedMethodChecker->AutoSize = true;
-			this->existedMethodChecker->Location = System::Drawing::Point(15, 102);
+			this->existedMethodChecker->BackColor = System::Drawing::SystemColors::ControlLight;
+			this->existedMethodChecker->Location = System::Drawing::Point(686, 4);
 			this->existedMethodChecker->Name = L"existedMethodChecker";
 			this->existedMethodChecker->Size = System::Drawing::Size(138, 17);
 			this->existedMethodChecker->TabIndex = 28;
 			this->existedMethodChecker->Text = L"Âñòðîåííûå ñðåäñòâà";
-			this->existedMethodChecker->UseVisualStyleBackColor = true;
+			this->existedMethodChecker->UseVisualStyleBackColor = false;
 			this->existedMethodChecker->CheckedChanged += gcnew System::EventHandler(this, &MyForm::existedMethodChecker_CheckedChanged);
 			// 
-			// color_chooser
+			// statusStrip1
 			// 
-			this->color_chooser->Location = System::Drawing::Point(9, 73);
-			this->color_chooser->Name = L"color_chooser";
-			this->color_chooser->Size = System::Drawing::Size(151, 23);
-			this->color_chooser->TabIndex = 36;
-			this->color_chooser->Text = L"Âûáîð öâåòà";
-			this->color_chooser->UseVisualStyleBackColor = true;
-			this->color_chooser->Click += gcnew System::EventHandler(this, &MyForm::color_chooser_Click);
-			// 
-			// current_color
-			// 
-			this->current_color->BackColor = System::Drawing::Color::White;
-			this->current_color->Location = System::Drawing::Point(96, 35);
-			this->current_color->Name = L"current_color";
-			this->current_color->Size = System::Drawing::Size(32, 32);
-			this->current_color->TabIndex = 37;
-			this->current_color->TabStop = false;
-			// 
-			// label2
-			// 
-			this->label2->AutoSize = true;
-			this->label2->Location = System::Drawing::Point(12, 43);
-			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(78, 13);
-			this->label2->TabIndex = 38;
-			this->label2->Text = L"Òåêóùèé öâåò";
-			// 
-			// randomToolStripMenuItem
-			// 
-			this->randomToolStripMenuItem->Name = L"randomToolStripMenuItem";
-			this->randomToolStripMenuItem->Size = System::Drawing::Size(61, 20);
-			this->randomToolStripMenuItem->Text = L"Ðàíäîì";
-			this->randomToolStripMenuItem->Click += gcnew System::EventHandler(this, &MyForm::randomToolStripMenuItem_Click_1);
+			this->statusStrip1->Location = System::Drawing::Point(0, 343);
+			this->statusStrip1->Name = L"statusStrip1";
+			this->statusStrip1->Size = System::Drawing::Size(845, 22);
+			this->statusStrip1->TabIndex = 39;
+			this->statusStrip1->Text = L"statusStrip1";
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(826, 365);
+			this->ClientSize = System::Drawing::Size(845, 365);
+			this->Controls->Add(this->statusStrip1);
 			this->Controls->Add(this->existedMethodChecker);
-			this->Controls->Add(this->label2);
-			this->Controls->Add(this->current_color);
-			this->Controls->Add(this->color_chooser);
 			this->Controls->Add(this->canvas);
 			this->Controls->Add(this->menuStrip1);
 			this->MainMenuStrip = this->menuStrip1;
@@ -305,7 +291,6 @@ namespace sem1 {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->canvas))->EndInit();
 			this->menuStrip1->ResumeLayout(false);
 			this->menuStrip1->PerformLayout();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->current_color))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -326,7 +311,6 @@ namespace sem1 {
 	private: System::Void createObjectToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void cutToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void load_lines_Click(System::Object^  sender, System::EventArgs^  e);
-	private: System::Void color_chooser_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void loadfileToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void savefileToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void cleanToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
@@ -336,5 +320,6 @@ namespace sem1 {
 	private: System::Void circleToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void ellipseToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void randomToolStripMenuItem_Click_1(System::Object^  sender, System::EventArgs^  e);
-};
+	private: System::Void colorChooserToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
+	};
 }
