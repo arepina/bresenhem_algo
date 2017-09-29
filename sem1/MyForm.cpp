@@ -68,15 +68,6 @@ System::Void sem1::MyForm::aboutProgramToolStripMenuItem_Click(System::Object^  
 		"Для удоства выполнения различных функций используются вкладки меню. Чтобы создать один из трех объектов: линия, круг, эллипс требуется выбрать тип объекта, вариант отрисовки, а также желаемый цвет на 1 вкладке. Далее достаточно просто нажатием мыши задавать координаты фигур. Для заливки требуется выбрать вкладку номер 2, где, выбрав цвет заливки, можно выполнить зиливку фигуры также жатием кнопки мыши на стартовый пиксель(тот, от которого идет заливка). С помощью 3 вкладки можно выполнить отсечение. На данной вкладке доступны для рисования лишь отрезки, чтобы отсечь которые требуется перейти в режим окна и нарисовать таковое двумя кликами мыши. Кроме того для вышеописанных действий имеется возможность загрузки/сохранения данных в файл. В файле хранятся данные о названии фигуры, а также требуемые для их отрисовки координаты. Пример входных данных представлен в файле figures.txt", "О программе");
 }
 
-System::Void sem1::MyForm::createObjectToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
-{
-	is_line_by_line = false;
-	is_xor = false;
-	is_window_mode = false;
-	is_objects = true;
-	dots->Clear();
-}
-
 System::Void sem1::MyForm::cutToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	is_line_by_line = false;
@@ -185,8 +176,13 @@ System::Void sem1::MyForm::xorToolStripMenuItem_Click(System::Object ^ sender, S
 	is_objects = false;
 }
 
-System::Void sem1::MyForm::LineToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
+System::Void sem1::MyForm::lineToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	is_line_by_line = false;
+	is_xor = false;
+	is_window_mode = false;
+	is_objects = true;
+	dots->Clear();
 	is_line = true;
 	is_circle = false;
 	is_ellipse = false;
@@ -194,6 +190,11 @@ System::Void sem1::MyForm::LineToolStripMenuItem_Click(System::Object ^ sender, 
 
 System::Void sem1::MyForm::circleToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	is_line_by_line = false;
+	is_xor = false;
+	is_window_mode = false;
+	is_objects = true;
+	dots->Clear();
 	is_line = false;
 	is_circle = true;
 	is_ellipse = false;
@@ -201,6 +202,11 @@ System::Void sem1::MyForm::circleToolStripMenuItem_Click(System::Object ^ sender
 
 System::Void sem1::MyForm::ellipseToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
+	is_line_by_line = false;
+	is_xor = false;
+	is_window_mode = false;
+	is_objects = true;
+	dots->Clear();
 	is_line = false;
 	is_circle = false;
 	is_ellipse = true;
