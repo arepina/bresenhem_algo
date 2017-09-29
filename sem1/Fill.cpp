@@ -45,7 +45,7 @@ System::Void sem1::Fill::row_by_row_fill(System::Collections::Generic::Stack<Poi
 			current.X--;
 		}
 		im->FillRectangle(gcnew SolidBrush(current_color), current.X, current.Y, 1, 1);
-		
+
 		left = current;//save the most left pixel
 
 		//go down
@@ -65,22 +65,44 @@ System::Void sem1::Fill::row_by_row_fill(System::Collections::Generic::Stack<Poi
 	}
 }
 
-System::Void sem1::Fill::xor_fill(int ex, int ey)
+System::Void sem1::Fill::xor_fill(System::Collections::Generic::List<Figure^>^ lines, Bitmap^ bm, Graphics^ im, PictureBox^ canvas, Color current_color)
 {
-	/*int ymax, xmax;
-	bool flag = false;
-	for (int y = 0; y < ymax; y++)
+	int xmax = -1;
+	for (int i = 0; i < lines->Count; i++)
 	{
-	flag = false;
-	for (int x = 0; x < xmax; x++)
-	{
-	if (i[x, y] == 1)
-	{
-	flag = !flag;
+		Figure^ f = lines[i];
+		if (f->x1 > xmax)
+			xmax = f->x1;
+		if (f->x2 > xmax)
+			xmax = f->x2;
 	}
-	if (flag)
-	i[x, y] = 1;
+	for (int i = 0; i < lines->Count; i++)
+	{
+		Figure^ f = lines[i];
+		Point p1 = Point(f->x1, f->y1);
+		Point p2 = Point(f->x2, f->y2);
+		int from, to;
+		if (p1.Y > p2.Y) {
+			from = p2.Y;
+			to = p1.Y;
+		}
+		else {
+			from = p1.Y;
+			to = p2.Y;
+		}
+		for (from; from <= to; from++) {
+			float up = (p2.Y - p1.Y);
+			float down = (p2.X - p1.X)*(from - p1.Y);
+			float cur_x =  up / down + p1.X + 1;
+			for (int j = cur_x; j <= xmax; j++)
+			{
+				if (bm->GetPixel(cur_x, p1.Y) == Color::White)
+					im->FillRectangle(gcnew SolidBrush(current_color), (int)cur_x, (int)from, 1, 1);
+				else
+					im->FillRectangle(gcnew SolidBrush(Color::White), (int)cur_x, (int)from, 1, 1);
+				canvas->Refresh();
+			}
+		}
 	}
-	}*/
 }
 

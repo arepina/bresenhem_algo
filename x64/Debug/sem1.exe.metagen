@@ -23,7 +23,6 @@ Class sem1.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     System.Drawing.Color current_color : Public
     Boolean existed_method : Public
     Boolean is_line_by_line : Public
-    Boolean is_xor : Public
     Boolean is_window_mode : Public
     Boolean is_objects : Public
     Boolean is_line : Public

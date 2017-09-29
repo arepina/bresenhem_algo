@@ -71,7 +71,6 @@ System::Void sem1::MyForm::aboutProgramToolStripMenuItem_Click(System::Object^  
 System::Void sem1::MyForm::cutToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	is_line_by_line = false;
-	is_xor = false;
 	is_window_mode = true;
 	is_objects = false;
 	dots->Clear();
@@ -163,23 +162,21 @@ System::Void sem1::MyForm::cleanToolStripMenuItem_Click(System::Object ^ sender,
 System::Void sem1::MyForm::lineByLineToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	is_line_by_line = true;
-	is_xor = false;
 	is_window_mode = false;
 	is_objects = false;
 }
 
 System::Void sem1::MyForm::xorToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
-	is_xor = true;
 	is_line_by_line = false;
 	is_window_mode = false;
 	is_objects = false;
+	draw_xor();
 }
 
 System::Void sem1::MyForm::lineToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	is_line_by_line = false;
-	is_xor = false;
 	is_window_mode = false;
 	is_objects = true;
 	dots->Clear();
@@ -191,7 +188,6 @@ System::Void sem1::MyForm::lineToolStripMenuItem_Click(System::Object ^ sender, 
 System::Void sem1::MyForm::circleToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	is_line_by_line = false;
-	is_xor = false;
 	is_window_mode = false;
 	is_objects = true;
 	dots->Clear();
@@ -203,7 +199,6 @@ System::Void sem1::MyForm::circleToolStripMenuItem_Click(System::Object ^ sender
 System::Void sem1::MyForm::ellipseToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	is_line_by_line = false;
-	is_xor = false;
 	is_window_mode = false;
 	is_objects = true;
 	dots->Clear();
@@ -264,9 +259,18 @@ System::Void sem1::MyForm::draw_line_by_line(int ex, int ey)
 	Fill::row_by_row_fill(pixel, bm, im, canvas, current_color);
 }
 
-System::Void sem1::MyForm::draw_xor(int ex, int ey)
+System::Void sem1::MyForm::draw_xor()
 {
-	Fill::xor_fill(ex, ey);
+	System::Object ^ sender;
+	System::EventArgs ^ e;
+	int size_before = figures->Count;
+	loadfileToolStripMenuItem_Click(sender, e);
+	System::Collections::Generic::List<Figure^> ^lines = gcnew System::Collections::Generic::List<Figure^>();
+	for (int i = size_before; i < figures->Count; i++)
+	{
+		lines->Add(figures[i]);
+	}
+	Fill::xor_fill(lines, bm , im , canvas, current_color);
 }
 
 System::Void sem1::MyForm::draw_window(int ex, int ey)
@@ -310,15 +314,23 @@ System::Void sem1::MyForm::draw_window(int ex, int ey)
 				rect = System::Drawing::Rectangle(current.X, current.Y, abs(current.X - first->X), abs(current.Y - first->Y));
 			}
 		}
-		im->DrawRectangle(gcnew Pen(Color::Black), rect);
 		dots->Clear();
 		List<Figure^>^ lines = gcnew List<Figure^>();
-		for each (Figure^ fig in figures)
+		for each (Figure^ fig in figures)//collect all the lines
 		{
 			if (fig->getFigureType() == FigureType::Line)
 				lines->Add(fig);
 		}
+		im->Clear(Color::White);
 		Cut::process_lines_cut(xl, xp, yv, yn, lines, im);
+		for each (Figure^ var in figures)//redraw the non line figures
+		{
+			if(var->getFigureType() == FigureType::Circle)
+				im->DrawEllipse(gcnew Pen(current_color), var->x1 - var->rad_first, var->y1 - var->rad_first, var->rad_first * 2, var->rad_first * 2);
+			else if(var->getFigureType() == FigureType::Ellipse)
+				im->DrawEllipse(gcnew Pen(current_color), var->x1 - var->rad_first, var->y1 - var->rad_first, var->rad_first * 2, var->rad_second * 2);
+		}
+		im->DrawRectangle(gcnew Pen(Color::Black), rect);
 	}
 	else
 		dots->Add(current);
@@ -381,9 +393,7 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 	if (is_objects)
 		draw_objects(ex, ey);
 	else if (is_line_by_line)
-		draw_line_by_line(ex, ey);
-	else if (is_xor)
-		draw_xor(ex, ey);
+		draw_line_by_line(ex, ey);		
 	else if (is_window_mode)
 		draw_window(ex, ey);
 	canvas->Refresh();
@@ -398,7 +408,6 @@ sem1::MyForm::MyForm(void)
 	current_color = Color::Black;
 	existed_method = false;
 	is_line_by_line = false;
-	is_xor = false;
 	is_window_mode = false;
 	is_objects = true;
 	is_line = true;

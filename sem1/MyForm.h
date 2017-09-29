@@ -54,7 +54,7 @@ namespace sem1 {
 		static Bitmap ^bm;
 		static Graphics ^im;
 		Color current_color;
-		bool existed_method, is_line_by_line, is_xor, is_window_mode, is_objects, is_line, is_circle, is_ellipse;
+		bool existed_method, is_line_by_line, is_window_mode, is_objects, is_line, is_circle, is_ellipse;
 	private: System::Windows::Forms::PictureBox^  canvas;
 			 System::Windows::Forms::MenuStrip^  menuStrip1;
 
@@ -334,7 +334,7 @@ namespace sem1 {
 	private: System::Void random_click_imitation(int click_number);//imitate the figures random
 	private: System::Void draw_objects(int ex, int ey);
 	private: System::Void draw_line_by_line(int ex, int ey);
-	private: System::Void draw_xor(int ex, int ey);
+	private: System::Void draw_xor();
 	private: System::Void draw_window(int ex, int ey);
 	private: System::Void canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);//clicked on canvas
 	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e);//changed the drawing way
