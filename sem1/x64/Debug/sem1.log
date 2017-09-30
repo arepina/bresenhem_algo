@@ -1,12 +1,5 @@
-﻿  Cut.cpp
-Cut.cpp(54): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-Cut.cpp(58): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-Cut.cpp(63): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-Cut.cpp(67): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-Cut.cpp(73): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-Cut.cpp(77): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-Cut.cpp(82): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-Cut.cpp(86): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  Bresenhem.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
-  sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.exe
-  sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.pdb (Partial PDB)
+﻿  Fill.cpp
+Fill.cpp(94): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+Fill.cpp(95): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+Fill.cpp(99): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  sem1.vcxproj -> C:\Users\aarep\Downloads\bresenhem_algo\x64\Debug\sem1.exe

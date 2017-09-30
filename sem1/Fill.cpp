@@ -81,7 +81,7 @@ System::Void sem1::Fill::xor_fill(System::Collections::Generic::List<Figure^>^ l
 		Figure^ f = lines[i];
 		Point p1 = Point(f->x1, f->y1);
 		Point p2 = Point(f->x2, f->y2);
-		int from, to;
+		int from, to;//find the y from and y to
 		if (p1.Y > p2.Y) {
 			from = p2.Y;
 			to = p1.Y;
@@ -90,16 +90,19 @@ System::Void sem1::Fill::xor_fill(System::Collections::Generic::List<Figure^>^ l
 			from = p1.Y;
 			to = p2.Y;
 		}
-		for (from; from <= to; from++) {
-			float up = (p2.Y - p1.Y);
-			float down = (p2.X - p1.X)*(from - p1.Y);
-			float cur_x =  up / down + p1.X + 1;
-			for (int j = cur_x; j <= xmax; j++)
+		for (from; from < to; from++) {//fill line by line for yeach y row
+			float down = (p1.Y - p2.Y);
+			float up = (from - p1.Y) * (p1.X - p2.X) + p1.X*(p1.Y - p2.Y);
+			float cur_x =  up / down + 2;//find the x from point and add 1 because it is border
+			for (cur_x; cur_x <= xmax; cur_x++)//fill each pixel using xor from found from point to the xmax
 			{
-				if (bm->GetPixel(cur_x, p1.Y) == Color::White)
+				Color cur_pixel_color = bm->GetPixel(cur_x, from);
+				if (cur_pixel_color.ToArgb() == f->c.ToArgb())
+					continue;
+				if (cur_pixel_color.ToArgb() == Color::FromArgb(0, 0, 0, 0).ToArgb())
 					im->FillRectangle(gcnew SolidBrush(current_color), (int)cur_x, (int)from, 1, 1);
 				else
-					im->FillRectangle(gcnew SolidBrush(Color::White), (int)cur_x, (int)from, 1, 1);
+					im->FillRectangle(gcnew SolidBrush(Color::FromArgb(255, 255, 255, 255)), (int)cur_x, (int)from, 1, 1);
 				canvas->Refresh();
 			}
 		}

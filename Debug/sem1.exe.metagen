@@ -17,7 +17,16 @@ Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c5619
 Class sem1.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
-  Methods:
-    bres_line(): PrivateScope, Public, HideBySig
-    bres_circle(): PrivateScope, Public, HideBySig
-    bres_ellipse(): PrivateScope, Public, HideBySig
+  Fields:
+    System.Collections.Generic.List`1[System.Drawing.Point] dots : Public
+    System.Collections.Generic.List`1[sem1.Figure] figures : Public
+    System.Drawing.Color current_color : Public
+    Boolean existed_method : Public
+    Boolean is_line_by_line : Public
+    Boolean is_window_mode : Public
+    Boolean is_objects : Public
+    Boolean is_line : Public
+    Boolean is_circle : Public
+    Boolean is_ellipse : Public
+    System.Drawing.Bitmap bm : Public, Static
+    System.Drawing.Graphics im : Public, Static
