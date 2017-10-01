@@ -2,13 +2,13 @@
 #pragma once
 using namespace System::Drawing;
 namespace sem1 {
-	enum class FigureType {
+	enum class FigureType {//variants of figure types
 		Line,
 		Circle,
 		Ellipse,
 		Rect
 	};
-	ref class Figure
+	ref class Figure//figure class
 	{
 	private:
 		FigureType figure_type;

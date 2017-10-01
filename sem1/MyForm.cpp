@@ -51,7 +51,7 @@ System::Void sem1::MyForm::random_click_imitation(int click_number)
 }
 
 System::Void sem1::MyForm::canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
-	if(dots->Count == 0 && is_objects)
+	if (dots->Count == 0 && is_objects)
 		im->FillRectangle(gcnew SolidBrush(current_color), e->X, e->Y, 1, 1);
 	what_to_draw(e->X, e->Y);
 }
@@ -64,9 +64,15 @@ System::Void sem1::MyForm::aboutProgramToolStripMenuItem_Click(System::Object^  
 		"Среда разработки: Visual Studio 2015 Entherprise \n" +
 		"ОС Windows 10\n" +
 		"Дата 07.09.2017\n" +
+		"Состав проекта:\n" +
+		"Bresenhem.h + Bresenhem.cpp - реализация алгоритмов Брезенхема\n" +
+		"Cut.h + Cut.cpp - реализация отсечения\n" +
+		"Fill.h + Fill.cpp - реализация заливок: построчной и XOR\n" +
+		"MyForm.h + MyForm.cpp - управление программой и действиями пользователя\n\n" +
 		"Выполнены пункты:\n" +
-		"1)bresenham line, circle ellipse algos\n" +
-		"2)fill line by line, xor fill, window cut\n\n" +
+		"1)Рисование линии, круга и эллипса с помощью алгоритма Брезенхема\n" +
+		"2)Построчная и XOR заливка\n" + 
+		"3)Отсечение\n\n" +
 		"Для удоства выполнения различных функций используются вкладки меню. Чтобы создать один из трех объектов: линия, круг, эллипс требуется выбрать тип объекта, вариант отрисовки, а также желаемый цвет. Далее достаточно просто нажатием мыши задавать координаты фигур (центр и радиусы или точки начала и конца). С помощью чекбокса можно выбрать, с помощью каких срдств будет выполняться отрисовка: встроенных или реализованных автором программы. \nЕсть возможность рандомной генерации вышеуказанных объектов с помощью кнопки рандом. \nДля заливки требуется выбрать тип: построчная или xor. В случае построчной можно залить фигуру нажатием кнопки мыши на стартовый пиксель(тот, от которого идет заливка). В случае xor происходит выбор файла, в котором уже хранятся линии-ребра фигуры. \nТакже можно выполнить отсечение. Чтобы отсечь требуется выбрать две точки, которые будут образовывать диагональ окна, двумя кликами мыши. \nКроме того для вышеописанных действий имеется возможность загрузки/сохранения данных в файл. В файле хранятся данные о названии фигуры, а также требуемые для их отрисовки координаты и цвет. Пример входных данных представлен в файле figures.txt. Пример данных для алгоритма Xor в файле XORdotsRed.txt. Пример всех возможных отрезков для демонстрации отсечения в файле linesForCut.txt. \nДля очистки области рисования треуется нажать на кнопку \"Очистить\".", "О программе");
 }
 
@@ -275,7 +281,7 @@ System::Void sem1::MyForm::draw_xor()
 		lines->Add(figures[i]);
 		border_color = figures[i]->c;
 	}
-	Fill::xor_fill(lines, bm , im , canvas, current_color, background_color, border_color);
+	Fill::xor_fill(lines, bm, im, canvas, current_color, background_color, border_color);
 }
 
 System::Void sem1::MyForm::draw_window(int ex, int ey)
@@ -307,7 +313,7 @@ System::Void sem1::MyForm::draw_window(int ex, int ey)
 		}
 		else {
 			xl = current.X;
-			xp = first->X;			
+			xp = first->X;
 			if (first->Y < current.Y) {
 				yn = current.Y;
 				yv = first->Y;
@@ -330,9 +336,9 @@ System::Void sem1::MyForm::draw_window(int ex, int ey)
 		Cut::process_lines_cut(xl, xp, yv, yn, lines, im);
 		for each (Figure^ var in figures)//redraw the non line figures
 		{
-			if(var->getFigureType() == FigureType::Circle)
+			if (var->getFigureType() == FigureType::Circle)
 				im->DrawEllipse(gcnew Pen(current_color), var->x1 - var->rad_first, var->y1 - var->rad_first, var->rad_first * 2, var->rad_first * 2);
-			else if(var->getFigureType() == FigureType::Ellipse)
+			else if (var->getFigureType() == FigureType::Ellipse)
 				im->DrawEllipse(gcnew Pen(current_color), var->x1 - var->rad_first, var->y1 - var->rad_first, var->rad_first * 2, var->rad_second * 2);
 		}
 		im->DrawRectangle(gcnew Pen(Color::Black), rect);
@@ -398,7 +404,7 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 	if (is_objects)
 		draw_objects(ex, ey);
 	else if (is_line_by_line)
-		draw_line_by_line(ex, ey);		
+		draw_line_by_line(ex, ey);
 	else if (is_window_mode)
 		draw_window(ex, ey);
 	canvas->Refresh();
