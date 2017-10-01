@@ -1,3 +1,11 @@
-﻿  Bresenhem.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
+﻿  Cut.cpp
+Cut.cpp(41): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+Cut.cpp(42): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+Cut.cpp(44): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  MyForm.cpp
+d:\bresenhem_algo\sem1\MyForm.h(53): warning C4677: 'figures': signature of non-private member contains assembly private type 'sem1::Figure'
+  d:\bresenhem_algo\sem1\Figure.h(12): note: see declaration of 'sem1::Figure'
+  Generating Code...
+  Bresenhem.obj : /DEBUG:FASTLINK is not supported when managed code is present; restarting link with /DEBUG:FULL
   sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.exe
   sem1.vcxproj -> D:\bresenhem_algo\x64\Debug\sem1.pdb (Partial PDB)

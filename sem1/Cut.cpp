@@ -22,6 +22,30 @@ int getcode(Point P, int xl, int xp, int yl, int yp)
 	return code;
 }
 
+List<Point>^ get_pixels(Point p1, Point p2)
+{
+	List<Point> ^pixels = gcnew List<Point>();
+	Point start, finish;
+	if (p1.Y > p2.Y)
+	{
+		start = p2;
+		finish = p1;
+	}
+	else
+	{
+		start = p1;
+		finish = p2;
+	}
+	for (start.Y; start.Y <= finish.Y; start.Y++)
+	{
+		float down = (p1.Y - p2.Y);
+		float up = (start.Y - p1.Y) * (p1.X - p2.X) + p1.X*(p1.Y - p2.Y);
+		float cur_x = up / down;//find the x from point and add 1 because it is border
+		pixels->Add(Point(cur_x, start.Y));
+	}
+	return pixels;
+}
+
 System::Void sem1::Cut::process_lines_cut(int xl, int xp, int yp, int yl, List<Figure^>^ lines, Graphics^ im)
 {
 	for (int i = 0; i < lines->Count; i++)
@@ -42,7 +66,17 @@ System::Void sem1::Cut::process_lines_cut(int xl, int xp, int yp, int yl, List<F
 			im->DrawLine(gcnew Pen(Color::Red), P1.X, P1.Y, P2.X, P2.Y);
 			continue;
 		}
-		Point P;
+		//partly visible
+		List<Point>^ pixels = get_pixels(P1, P2);
+		for (int i = 0; i < pixels->Count; i++)
+		{
+			Point cur = pixels[i];
+			if (xl < cur.X && cur.X < xp && yp < cur.Y && cur.Y < yl)
+				im->FillRectangle(gcnew SolidBrush(Color::Green), cur.X,  cur.Y, 1, 1);
+			else
+				im->FillRectangle(gcnew SolidBrush(Color::Red), cur.X, cur.Y, 1, 1);
+		}
+		/*Point P;
 		int temp;
 		//Decide if point1 is inside. if not calculate intersection
 		if (p1kod == 0) temp = p2kod;
@@ -94,18 +128,6 @@ System::Void sem1::Cut::process_lines_cut(int xl, int xp, int yp, int yl, List<F
 			new_x2 = P2.X;
 			new_y2 = P2.Y; 
 			im->DrawLine(gcnew Pen(Color::Red), new_x1, new_y1, new_x2, new_y2);
-		}
+		}*/
 	}
 }
-// partly visible
-//need to determite whether one of the ends is inside the window
-
-	/*
-	Определить точки пересечения прямых xl, xp, yv, yn и отрезка
-	Определить корректность точек пересечения
-	Вывести видимые части отрезков*/	/*m = (P2.Y- P1.Y) / (P2.X - P1.X);
-	int y_xl_peresech = m*(xl - P1.X) + P1.Y;
-	int y_xp_peresech = m*(xp - P1.X) + P1.Y;
-	int x_yv_peresech = P1.X + (1 / m)*(yv - P1.Y);
-	int x_yn_peresech = P1.X + (1 / m)*(yn - P1.Y);*/
-
