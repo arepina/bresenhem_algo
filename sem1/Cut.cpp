@@ -48,7 +48,7 @@ System::Void sem1::Cut::process_lines_cut(int xl, int xp, int yp, int yl, List<F
 		{
 			Point cur = pixels[i];
 			if (xl < cur.X && cur.X < xp && yp < cur.Y && cur.Y < yl)
-				im->FillRectangle(gcnew SolidBrush(Color::Green), cur.X, cur.Y, 1, 1);
+				im->FillRectangle(gcnew SolidBrush(Color::Yellow), cur.X, cur.Y, 1, 1);
 			else
 				im->FillRectangle(gcnew SolidBrush(Color::Red), cur.X, cur.Y, 1, 1);
 		}
