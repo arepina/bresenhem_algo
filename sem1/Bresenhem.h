@@ -12,6 +12,7 @@ namespace sem1 {
 	{
 
 	public:
+		static System::Collections::Generic::List<Point>^ bres_line_pixels(Point start, Point finish);
 		static void bres_line(Figure^ f, Graphics^ im, Brush^ b);//bresenham line algo
 		static void bres_circle(Figure^ f, Graphics^ im, Brush^ b);//bresenham circle algo
 		static void bres_ellipse(Figure^ f, Graphics^ im, Brush^ b);//ellipse algo

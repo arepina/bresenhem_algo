@@ -57,50 +57,26 @@ namespace sem1 {
 		bool existed_method, is_line_by_line, is_window_mode, is_objects, is_line, is_circle, is_ellipse;
 	private: System::Windows::Forms::PictureBox^  canvas;
 			 System::Windows::Forms::MenuStrip^  menuStrip1;
-
 			 System::Windows::Forms::ToolStripMenuItem^  aboutProgramToolStripMenuItem;
 			 System::Windows::Forms::CheckBox^  existedMethodChecker;
-
-
 			 System::Windows::Forms::ColorDialog^  colorDialog1;
-
-
-
 			 System::Windows::Forms::ToolStripMenuItem^  cleanToolStripMenuItem;
-
-
-
-
-
-	private: System::Windows::Forms::ToolStripMenuItem^  randomToolStripMenuItem;
-
-
-	private: System::Windows::Forms::StatusStrip^  statusStrip1;
-	private: System::Windows::Forms::ToolStripMenuItem^  ÓÔˆËËToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  creteObjectToolStripMenuItem;
-
-	private: System::Windows::Forms::ToolStripMenuItem^  Á‡ÎË‚Í‡ToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  linebylineToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  xorToolStripMenuItem1;
-
-
-	private: System::Windows::Forms::ToolStripMenuItem^  ‡·ÓÚ‡—‘‡ÈÎÓÏToolStripMenuItem1;
-	private: System::Windows::Forms::ToolStripMenuItem^  loadFileToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  saveFileToolStripMenuItem;
-
-
-	private: System::Windows::Forms::ToolStripMenuItem^  lineToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  circleToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  ellipseToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  cutToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^  colorChooserToolStripMenuItem;
-
-
-
-
-
-
-
+			 System::Windows::Forms::ToolStripMenuItem^  randomToolStripMenuItem;
+			 System::Windows::Forms::StatusStrip^  statusStrip1;
+			 System::Windows::Forms::ToolStripMenuItem^  ÓÔˆËËToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  creteObjectToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  Á‡ÎË‚Í‡ToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  linebylineToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  xorToolStripMenuItem1;
+			 System::Windows::Forms::ToolStripMenuItem^  ‡·ÓÚ‡—‘‡ÈÎÓÏToolStripMenuItem1;
+			 System::Windows::Forms::ToolStripMenuItem^  loadFileToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  saveFileToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  lineToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  circleToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  ellipseToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  cutToolStripMenuItem;
+			 System::Windows::Forms::ToolStripMenuItem^  colorChooserToolStripMenuItem;
+			 
 	protected:
 
 	private:
@@ -352,5 +328,5 @@ namespace sem1 {
 	private: System::Void ellipseToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void randomToolStripMenuItem_Click_1(System::Object^  sender, System::EventArgs^  e);
 	private: System::Void colorChooserToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e);
-};
+	};
 }

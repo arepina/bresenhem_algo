@@ -1,6 +1,7 @@
 //All the info is in the about
 #pragma once
 #include "Figure.h"
+#include "Bresenhem.h"
 #include <vector>
 using std::pair;
 using std::vector;

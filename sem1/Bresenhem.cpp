@@ -3,6 +3,42 @@
 using namespace sem1;
 using namespace std;
 
+
+
+System::Collections::Generic::List<Point>^ sem1::Bresenhem::bres_line_pixels(Point start, Point finish)
+{
+	System::Collections::Generic::List<Point>^ pixels = gcnew System::Collections::Generic::List<Point>();
+	int x = start.X;
+	int y = start.Y;
+	int delta_x = abs(finish.X - start.X);
+	int delta_y = abs(finish.Y - start.Y);
+	int s1 = finish.X - start.X >= 0 ? 1 : -1;
+	int s2 = finish.Y - start.Y >= 0 ? 1 : -1;
+	int obmen = 0;
+	if (delta_y > delta_x)
+	{
+		int temp = delta_x;
+		delta_x = delta_y;
+		delta_y = temp;
+		obmen = 1;
+	}
+	else
+		obmen = 0;
+	int error_val = 2 * delta_y - delta_x;
+	for (int i = 1; i <= delta_x; i++)
+	{
+		pixels->Add(Point(x, y));
+		while (error_val >= 0)
+		{
+			obmen == 1 ? x = x + s1 : y = y + s2;
+			error_val = error_val - 2 * delta_x;
+		}
+		obmen == 1 ? y = y + s2 : x = x + s1;
+		error_val = error_val + 2 * delta_y;
+	}
+	return pixels;
+}
+
 System::Void sem1::Bresenhem::bres_line(Figure^ f, Graphics^ im, Brush^brush)
 {
 	int x = f->x1;
