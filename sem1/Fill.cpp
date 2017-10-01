@@ -65,8 +65,9 @@ System::Void sem1::Fill::row_by_row_fill(System::Collections::Generic::Stack<Poi
 	}
 }
 
-System::Void sem1::Fill::xor_fill(System::Collections::Generic::List<Figure^>^ lines, Bitmap^ bm, Graphics^ im, PictureBox^ canvas, Color current_color)
+System::Void sem1::Fill::xor_fill(System::Collections::Generic::List<Figure^>^ lines, Bitmap^ bm, Graphics^ im, PictureBox^ canvas, Color current_color, Color background_color, Color border_color)
 {
+	Color no_color = Color::FromArgb(0,0,0,0);
 	int xmax = -1;
 	for (int i = 0; i < lines->Count; i++)
 	{
@@ -93,16 +94,16 @@ System::Void sem1::Fill::xor_fill(System::Collections::Generic::List<Figure^>^ l
 		for (from; from < to; from++) {//fill line by line for yeach y row
 			float down = (p1.Y - p2.Y);
 			float up = (from - p1.Y) * (p1.X - p2.X) + p1.X*(p1.Y - p2.Y);
-			float cur_x =  up / down + 2;//find the x from point and add 1 because it is border
-			for (cur_x; cur_x <= xmax; cur_x++)//fill each pixel using xor from found from point to the xmax
+			float cur_x =  up / down + 1;//find the x from point and add 1 because it is border
+			for (cur_x; cur_x < xmax; cur_x++)//fill each pixel using xor from found from point to the xmax
 			{
 				Color cur_pixel_color = bm->GetPixel(cur_x, from);
-				if (cur_pixel_color.ToArgb() == f->c.ToArgb())
+				if (cur_pixel_color == border_color)//skip the boder
 					continue;
-				if (cur_pixel_color.ToArgb() == Color::FromArgb(0, 0, 0, 0).ToArgb())
+				if (cur_pixel_color == no_color)//fill the pixel if it is not painted
 					im->FillRectangle(gcnew SolidBrush(current_color), (int)cur_x, (int)from, 1, 1);
 				else
-					im->FillRectangle(gcnew SolidBrush(Color::FromArgb(255, 255, 255, 255)), (int)cur_x, (int)from, 1, 1);
+					im->FillRectangle(gcnew SolidBrush(background_color), (int)cur_x, (int)from, 1, 1);
 				canvas->Refresh();
 			}
 		}

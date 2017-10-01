@@ -266,11 +266,14 @@ System::Void sem1::MyForm::draw_xor()
 	int size_before = figures->Count;
 	loadfileToolStripMenuItem_Click(sender, e);
 	System::Collections::Generic::List<Figure^> ^lines = gcnew System::Collections::Generic::List<Figure^>();
+	Color background_color = Color::White;
+	Color border_color;
 	for (int i = size_before; i < figures->Count; i++)
 	{
 		lines->Add(figures[i]);
+		border_color = figures[i]->c;
 	}
-	Fill::xor_fill(lines, bm , im , canvas, current_color);
+	Fill::xor_fill(lines, bm , im , canvas, current_color, background_color, border_color);
 }
 
 System::Void sem1::MyForm::draw_window(int ex, int ey)
