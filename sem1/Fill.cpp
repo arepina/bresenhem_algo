@@ -37,7 +37,6 @@ System::Void sem1::Fill::row_by_row_fill(System::Collections::Generic::Stack<Poi
 		im->FillRectangle(gcnew SolidBrush(current_color), current.X, current.Y, 1, 1);
 		//save the most right pixel
 		right = current;
-
 		current = start;//return to start point
 		//go to the left from start point
 		while (current.X - 1 > 0 && bm->GetPixel(current.X - 1, current.Y) == selected_pixel_color) {
@@ -45,24 +44,21 @@ System::Void sem1::Fill::row_by_row_fill(System::Collections::Generic::Stack<Poi
 			current.X--;
 		}
 		im->FillRectangle(gcnew SolidBrush(current_color), current.X, current.Y, 1, 1);
-
 		left = current;//save the most left pixel
-
 		//go down
 		if (current.Y - 1 >= 0)
 		{
 			current.Y--;
 			up_and_down(pixel, bm, current, right, current_pixel_colour, next_pixel_color, selected_pixel_color);
 		}
-
 		//go up
 		current = left;
 		if (current.Y + 1 < canvas->Height) {
 			current.Y += 1;
 			up_and_down(pixel, bm, current, right, current_pixel_colour, next_pixel_color, selected_pixel_color);
 		}
-		canvas->Refresh();
 	}
+	canvas->Refresh();
 }
 
 System::Void sem1::Fill::xor_fill(System::Collections::Generic::List<Figure^>^ lines, Bitmap^ bm, Graphics^ im, PictureBox^ canvas, Color current_color, Color background_color, Color border_color)

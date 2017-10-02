@@ -19,6 +19,7 @@ Class sem1.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Fields:
     System.Collections.Generic.List`1[System.Drawing.Point] dots : Public
+    System.Collections.Generic.List`1[System.Drawing.Point] xordots : Public
     System.Collections.Generic.List`1[sem1.Figure] figures : Public
     System.Drawing.Color current_color : Public
     Boolean existed_method : Public
@@ -28,5 +29,6 @@ Class sem1.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Boolean is_line : Public
     Boolean is_circle : Public
     Boolean is_ellipse : Public
+    Boolean is_xor : Public
     System.Drawing.Bitmap bm : Public, Static
     System.Drawing.Graphics im : Public, Static

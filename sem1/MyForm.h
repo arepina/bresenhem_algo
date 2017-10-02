@@ -50,11 +50,12 @@ namespace sem1 {
 
 	public:
 		List<Point>^ dots = gcnew List<Point>();
+		List<Point>^ xordots = gcnew List<Point>();
 		List<Figure^>^ figures = gcnew List<Figure^>();
 		static Bitmap ^bm;
 		static Graphics ^im;
 		Color current_color;
-		bool existed_method, is_line_by_line, is_window_mode, is_objects, is_line, is_circle, is_ellipse;
+		bool existed_method, is_line_by_line, is_window_mode, is_objects, is_line, is_circle, is_ellipse, is_xor;
 	private: System::Windows::Forms::PictureBox^  canvas;
 			 System::Windows::Forms::MenuStrip^  menuStrip1;
 			 System::Windows::Forms::ToolStripMenuItem^  aboutProgramToolStripMenuItem;
@@ -268,6 +269,8 @@ namespace sem1 {
 			// 
 			this->existedMethodChecker->AutoSize = true;
 			this->existedMethodChecker->BackColor = System::Drawing::SystemColors::ControlLight;
+			this->existedMethodChecker->Checked = true;
+			this->existedMethodChecker->CheckState = System::Windows::Forms::CheckState::Checked;
 			this->existedMethodChecker->Location = System::Drawing::Point(295, 4);
 			this->existedMethodChecker->Name = L"existedMethodChecker";
 			this->existedMethodChecker->Size = System::Drawing::Size(138, 17);
@@ -310,7 +313,7 @@ namespace sem1 {
 	private: System::Void random_click_imitation(int click_number);//imitate the figures random
 	private: System::Void draw_objects(int ex, int ey);
 	private: System::Void draw_line_by_line(int ex, int ey);
-	private: System::Void draw_xor();
+	private: System::Void draw_xor(int ex, int ey);
 	private: System::Void draw_window(int ex, int ey);
 	private: System::Void canvas_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e);//clicked on canvas
 	private: System::Void existedMethodChecker_CheckedChanged(System::Object^  sender, System::EventArgs^  e);//changed the drawing way

@@ -81,6 +81,7 @@ System::Void sem1::MyForm::cutToolStripMenuItem_Click(System::Object ^ sender, S
 	is_line_by_line = false;
 	is_window_mode = true;
 	is_objects = false;
+	is_xor = false;
 	dots->Clear();
 }
 
@@ -173,6 +174,7 @@ System::Void sem1::MyForm::lineByLineToolStripMenuItem_Click(System::Object ^ se
 	is_line_by_line = true;
 	is_window_mode = false;
 	is_objects = false;
+	is_xor = false;
 }
 
 System::Void sem1::MyForm::xorToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
@@ -180,13 +182,14 @@ System::Void sem1::MyForm::xorToolStripMenuItem_Click(System::Object ^ sender, S
 	is_line_by_line = false;
 	is_window_mode = false;
 	is_objects = false;
-	draw_xor();
+	is_xor = true;
 }
 
 System::Void sem1::MyForm::lineToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	is_line_by_line = false;
 	is_window_mode = false;
+	is_xor = false;
 	is_objects = true;
 	dots->Clear();
 	is_line = true;
@@ -197,6 +200,7 @@ System::Void sem1::MyForm::lineToolStripMenuItem_Click(System::Object ^ sender, 
 System::Void sem1::MyForm::circleToolStripMenuItem_Click(System::Object ^ sender, System::EventArgs ^ e)
 {
 	is_line_by_line = false;
+	is_xor = false;
 	is_window_mode = false;
 	is_objects = true;
 	dots->Clear();
@@ -209,6 +213,7 @@ System::Void sem1::MyForm::ellipseToolStripMenuItem_Click(System::Object ^ sende
 {
 	is_line_by_line = false;
 	is_window_mode = false;
+	is_xor = false;
 	is_objects = true;
 	dots->Clear();
 	is_line = false;
@@ -218,6 +223,9 @@ System::Void sem1::MyForm::ellipseToolStripMenuItem_Click(System::Object ^ sende
 
 System::Void sem1::MyForm::randomToolStripMenuItem_Click_1(System::Object ^ sender, System::EventArgs ^ e)
 {
+	is_line_by_line = false;
+	is_window_mode = false;
+	is_xor = false;
 	is_objects = true;
 	FigureType t = FigureType(rand() % 3);
 	if (t == FigureType::Line) {
@@ -268,21 +276,39 @@ System::Void sem1::MyForm::draw_line_by_line(int ex, int ey)
 	Fill::row_by_row_fill(pixel, bm, im, canvas, current_color);
 }
 
-System::Void sem1::MyForm::draw_xor()
+System::Void sem1::MyForm::draw_xor(int ex, int ey)
 {
-	System::Object ^ sender;
-	System::EventArgs ^ e;
-	int size_before = figures->Count;
-	loadfileToolStripMenuItem_Click(sender, e);
-	System::Collections::Generic::List<Figure^> ^lines = gcnew System::Collections::Generic::List<Figure^>();
-	Color background_color = Color::White;
-	Color border_color;
-	for (int i = size_before; i < figures->Count; i++)
+	im->FillRectangle(gcnew SolidBrush(current_color), ex, ey, 1, 1);
+	bool is_finished = false;
+	for (int i = 0; i < xordots->Count; i++)
 	{
-		lines->Add(figures[i]);
-		border_color = figures[i]->c;
+		if (abs(xordots[i].X - ex) <= 5 && abs(xordots[i].Y - ey <= 5))
+			is_finished = true;
 	}
-	Fill::xor_fill(lines, bm, im, canvas, current_color, background_color, border_color);
+	if (is_finished)
+	{
+		Color background_color = Color::White;
+		Color border_color = current_color;
+		System::Collections::Generic::List<Figure^> ^lines = gcnew System::Collections::Generic::List<Figure^>();
+		for (int i = 0; i < xordots->Count - 1; i++)
+		{
+			Figure^ f = gcnew Figure();
+			f->create_line(xordots[i].X, xordots[i].Y, xordots[i + 1].X, xordots[i + 1].Y, current_color);
+			im->DrawLine(gcnew Pen(current_color), xordots[i].X, xordots[i].Y, xordots[i + 1].X, xordots[i + 1].Y);
+			lines->Add(f);
+		}
+		Figure^ f = gcnew Figure();
+		f->create_line(xordots[xordots->Count - 1].X, xordots[xordots->Count - 1].Y, xordots[0].X, xordots[0].Y, current_color);
+		im->DrawLine(gcnew Pen(current_color), xordots[xordots->Count - 1].X, xordots[xordots->Count - 1].Y, xordots[0].X, xordots[0].Y);
+		canvas->Refresh();
+		lines->Add(f);
+		Fill::xor_fill(lines, bm, im, canvas, current_color, background_color, border_color);
+		im->FillRectangle(gcnew SolidBrush(current_color), ex, ey, 1, 1);
+		xordots->Clear();
+	}
+	else {
+		xordots->Add(Point(ex, ey));
+	}
 }
 
 System::Void sem1::MyForm::draw_window(int ex, int ey)
@@ -407,6 +433,8 @@ System::Void sem1::MyForm::what_to_draw(int ex, int ey)
 		draw_line_by_line(ex, ey);
 	else if (is_window_mode)
 		draw_window(ex, ey);
+	else if (is_xor)
+		draw_xor(ex, ey);
 	canvas->Refresh();
 }
 
@@ -424,6 +452,7 @@ sem1::MyForm::MyForm(void)
 	is_line = true;
 	is_circle = false;
 	is_ellipse = false;
+	is_xor = false;
 	cleanCanvas();
 }
 
@@ -433,5 +462,6 @@ System::Void sem1::MyForm::cleanCanvas()
 	dots->Clear();
 	figures->Clear();
 	canvas->Refresh();
+	xordots->Clear();
 }
 #pragma endregion Drawing
