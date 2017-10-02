@@ -424,6 +424,7 @@ sem1::MyForm::MyForm(void)
 	is_line = true;
 	is_circle = false;
 	is_ellipse = false;
+	cleanCanvas();
 }
 
 System::Void sem1::MyForm::cleanCanvas()

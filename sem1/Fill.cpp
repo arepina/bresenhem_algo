@@ -67,7 +67,7 @@ System::Void sem1::Fill::row_by_row_fill(System::Collections::Generic::Stack<Poi
 
 System::Void sem1::Fill::xor_fill(System::Collections::Generic::List<Figure^>^ lines, Bitmap^ bm, Graphics^ im, PictureBox^ canvas, Color current_color, Color background_color, Color border_color)
 {
-	Color no_color = Color::FromArgb(0,0,0,0);
+	Color no_color = Color::FromArgb(255,255,255,255);
 	int xmax = -1;
 	for (int i = 0; i < lines->Count; i++)
 	{
@@ -98,15 +98,19 @@ System::Void sem1::Fill::xor_fill(System::Collections::Generic::List<Figure^>^ l
 			for (cur_x; cur_x < xmax; cur_x++)//fill each pixel using xor from found from point to the xmax
 			{
 				Color cur_pixel_color = bm->GetPixel(cur_x, from);
-				if (cur_pixel_color == border_color)//skip the boder
+				if (cur_pixel_color == border_color && cur_x == up/down)//skip the boder
 					continue;
 				if (cur_pixel_color == no_color)//fill the pixel if it is not painted
 					im->FillRectangle(gcnew SolidBrush(current_color), (int)cur_x, (int)from, 1, 1);
 				else
 					im->FillRectangle(gcnew SolidBrush(background_color), (int)cur_x, (int)from, 1, 1);
-				canvas->Refresh();
 			}
 		}
 	}
+	for (int i = 0; i < lines->Count; i++)
+	{
+		im->DrawLine(gcnew Pen(border_color), lines[i]->x1, lines[i]->y1, lines[i]->x2, lines[i]->y2);
+	}
+	canvas->Refresh();
 }
 

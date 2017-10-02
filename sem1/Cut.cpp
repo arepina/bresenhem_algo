@@ -31,7 +31,6 @@ System::Void sem1::Cut::process_lines_cut(int xl, int xp, int yp, int yl, List<F
 		Point P2 = Point(p_sum->x2, p_sum->y2);
 		int p1kod = getcode(P1, xl, xp, yl, yp);
 		int p2kod = getcode(P2, xl, xp, yl, yp);
-		float m = (float)(P2.Y - P1.Y) / (P2.X - P1.X);
 		// fully visible
 		if (p1kod == 0 && p2kod == 0) {
 			im->DrawLine(gcnew Pen(Color::Green), P1.X, P1.Y, P2.X, P2.Y);
