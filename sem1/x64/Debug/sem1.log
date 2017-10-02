@@ -1,9 +1,6 @@
-﻿  Fill.cpp
-Fill.cpp(95): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-Fill.cpp(96): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-Fill.cpp(100): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-  MyForm.cpp
-c:\users\aarep\downloads\bresenhem_algo\sem1\MyForm.h(53): warning C4677: 'figures': signature of non-private member contains assembly private type 'sem1::Figure'
-  c:\users\aarep\downloads\bresenhem_algo\sem1\Figure.h(12): note: see declaration of 'sem1::Figure'
-  Generating Code...
+﻿  Cut.cpp
+Cut.cpp(56): warning C4996: '_sleep': This function or variable has been superceded by newer library or operating system functionality. Consider using Sleep instead. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\ucrt\stdlib.h(1282): note: see declaration of '_sleep'
+Cut.cpp(69): warning C4996: '_sleep': This function or variable has been superceded by newer library or operating system functionality. Consider using Sleep instead. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\ucrt\stdlib.h(1282): note: see declaration of '_sleep'
   sem1.vcxproj -> C:\Users\aarep\Downloads\bresenhem_algo\x64\Debug\sem1.exe

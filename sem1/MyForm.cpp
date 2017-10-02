@@ -129,6 +129,7 @@ System::Void sem1::MyForm::loadfileToolStripMenuItem_Click(System::Object ^ send
 					figures->Add(f);
 					Bresenhem::bres_ellipse(f, im, gcnew SolidBrush(c));
 				}
+				canvas->Refresh();
 			}
 			myfile.close();
 		}
@@ -332,8 +333,7 @@ System::Void sem1::MyForm::draw_window(int ex, int ey)
 			if (fig->getFigureType() == FigureType::Line)
 				lines->Add(fig);
 		}
-		im->Clear(Color::White);
-		Cut::process_lines_cut(xl, xp, yv, yn, lines, im);
+		Cut::process_lines_cut(xl, xp, yv, yn, lines, im, canvas);
 		for each (Figure^ var in figures)//redraw the non line figures
 		{
 			if (var->getFigureType() == FigureType::Circle)

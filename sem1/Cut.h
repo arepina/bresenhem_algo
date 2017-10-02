@@ -8,12 +8,13 @@ using std::vector;
 #include <cmath>
 using namespace System::Drawing;
 using namespace System::Collections::Generic;
+using namespace System::Windows::Forms;
 
 namespace sem1 {
 	ref class Cut
 	{
 	public:
-		static void process_lines_cut(int x1_cut, int y1_cut, int x2_cut, int y2_cut, List<Figure^>^ lines, Graphics^ im);//make the cut of lines using window
+		static void process_lines_cut(int x1_cut, int y1_cut, int x2_cut, int y2_cut, List<Figure^>^ lines, Graphics^ im, PictureBox^ canvas);//make the cut of lines using window
 	};
 }
 
